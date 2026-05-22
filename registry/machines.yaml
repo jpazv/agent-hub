@@ -1,0 +1,14 @@
+machines:
+  - id: mac-grupovelas
+    display_name: Mac Grupo Velas
+    role: interactive
+    os: macos
+    agents:
+      - claude-code
+    notes: maquina principal de uso diario
+
+# Roles disponiveis:
+#   interactive  → uso diario, editor, terminal
+#   primary      → no principal do ecossistema, consolida memoria
+#   hybrid       → runtime remoto + uso interativo
+#   server       → apenas servicos, sem uso interativo

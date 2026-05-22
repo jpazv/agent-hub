@@ -1,0 +1,18 @@
+projects: []
+
+# Adicione projetos aqui conforme conectar ao hub.
+# Exemplo:
+#   - id: meu-projeto
+#     display_name: Meu Projeto
+#     path: /Users/grupovelas/projetos/meu-projeto
+#     repo: https://github.com/jpazv/meu-projeto
+#     status: active
+#     context: personal
+#     agents:
+#       - claude-code
+#     notes: descricao breve do projeto
+
+# Status disponiveis:
+#   active   → projeto em andamento
+#   paused   → pausado temporariamente
+#   archived → concluido ou abandonado
