@@ -7,7 +7,7 @@ Last updated: 2026-07-22
 | No | Status |
 |---|---|
 | mac-grupovelas | ✅ operacional |
-| macbook-jpazv | ✅ operacional — `~/Desktop/Pulse1.0.1` confirmado acessivel via iCloud, trabalho continuado no projeto pulse |
+| macbook-jpazv | ✅ operacional — hub e pulse movidos pra `~/dev/` (fora do iCloud), ver fix definitivo abaixo |
 
 ## O que foi feito nesta sessao (2026-07-22)
 
@@ -48,13 +48,26 @@ dentro de uma pasta que o iCloud sincroniza por padrão. Ele não sabe que o
 git já resolve isso sozinho; continua tentando sincronizar `.git/` de
 qualquer forma.
 
-**Fix definitivo recomendado (ainda não aplicado)**: mover o diretório de
-trabalho do Pulse pra **fora** do escopo do iCloud Desktop/Documents em
-ambas as máquinas — ex. `~/dev/pulse` ou `~/code/pulse` (qualquer pasta que
-não seja `~/Desktop` nem `~/Documents`). Cada máquina passa a ter seu
-próprio clone local independente, sincronizado **só** via `git pull`/`push`
-normal contra o GitHub — nunca mais via iCloud. Isso remove a causa raiz de
-vez, em vez de só consertar depois de cada corrupção.
+**Fix definitivo**: mover o diretório de trabalho pra **fora** do escopo do
+iCloud Desktop/Documents — cada máquina passa a ter seu próprio clone local
+independente, sincronizado **só** via `git pull`/`push` normal contra o
+GitHub — nunca mais via iCloud. Isso remove a causa raiz de vez, em vez de
+só consertar depois de cada corrupção.
+
+**✅ Aplicado no `macbook-jpazv` em 2026-07-22**: `~/Desktop/Pulse1.0.1` →
+`~/dev/pulse`, e `~/Documents/agent-hub` → `~/dev/agent-hub`. O
+`~/.claude/CLAUDE.md` local (fontes de verdade do hub) foi atualizado pra
+apontar pro novo caminho `/Users/jp/dev/agent-hub/...`. A pasta antiga
+corrompida do Pulse (`~/Desktop/Pulse1.0.1.icloud-corrupted-backup-20260722`)
+foi deixada como backup, não apagada — pode ser removida depois de confirmar
+que o clone novo em `~/dev/pulse` está saudável.
+
+**⏳ Pendente no `mac-grupovelas`**: aplicar o mesmo — mover
+`~/Desktop/Pulse1.0.1` (ou onde estiver lá) e `~/Documents/agent-hub` pra
+fora do escopo do iCloud (ex. `~/dev/pulse` e `~/dev/agent-hub`, mesma
+convenção), e atualizar o `~/.claude/CLAUDE.md` daquela máquina com o novo
+caminho absoluto (`/Users/grupovelas/dev/agent-hub/...`). Enquanto isso não
+for feito lá, aquela máquina continua exposta ao mesmo bug de corrupção.
 
 **Recuperação rápida se acontecer de novo antes do fix acima ser aplicado**
 (feito manualmente no `macbook-jpazv` em 2026-07-22, funcionou bem):
@@ -85,9 +98,8 @@ porque `refs/remotes/origin/main` sobreviveu intacto e não havia commits
 locais não enviados: `git fetch origin && git update-ref refs/heads/main
 refs/remotes/origin/main`, depois apagados os arquivos duplicados (`rm`, não
 `git checkout` — evita o classificador de auto mode bloquear por parecer
-descarte de mudanças). **O hub em si também deveria considerar sair do
-escopo do iCloud** (`~/Documents`) pra não repetir isso — decisão do usuário,
-não aplicada ainda.
+descarte de mudanças). Fix definitivo pro hub em si aplicado logo em
+seguida, ver abaixo.
 
 ## Proximo passo recomendado
 
