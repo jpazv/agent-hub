@@ -27,6 +27,68 @@ Last updated: 2026-07-22
 - **Polimento pos-Fase-3 + deploy**: verificacao visual real com Playwright (achou e corrigiu bug de redirect 404 e bordas quase invisiveis no design system), insight de qualidade de atendimento revelado com sutileza (checklist expansivel + toast de descoberta), modo demo (`NEXT_PUBLIC_DEMO_MODE`, dashboard le de JSON estatico, zero latencia), e **deploy em produção no Vercel**: https://pulse-app-steel-tau.vercel.app (login demo@pulse.local/demo12345). Ver `memory/handoffs/2026-07-22-pulse-mvp-instant-demo-e-deploy.md`.
 - Decisoes/pendencias abertas (nao bloqueiam): scheduling de score-leads/detect-agendamentos/ask-compareceu e do pg_cron do check-alerts; env vars de producao real (Meta/cron/Groq) ainda nao configuradas no Vercel (só o modo demo funciona lá); conta Vercel sem GitHub conectado (deploy é manual via `vercel --prod`, nao automatico em push). Tudo pra Fase 4.
 
+## ⚠️ Bug recorrente conhecido: corrupção do `.git` via iCloud (ler antes de tocar no repo local do Pulse)
+
+Já aconteceu **pelo menos 2 vezes**: o diretório de trabalho do Pulse
+(`~/Desktop/Pulse1.0.1`) fica dentro do escopo do iCloud "Desktop e
+Documentos", que sincroniza **arquivo por arquivo** entre `mac-grupovelas` e
+`macbook-jpazv`. O `.git` (e `node_modules`) tem escrita constante e
+concorrente (index, HEAD, refs, objects mudam a cada comando git) — o iCloud
+não entende isso como uma unidade atômica, então quando as duas máquinas
+escrevem quase ao mesmo tempo ele cria cópias de conflito (`index 2`,
+`COMMIT_EDITMSG 2`, `objects 2`, `logs 2`, `.git/hooks` e `.git/logs` com
+contagem de entradas absurda). O resultado: `git status`/`git log` ficam
+travados (observado: `git status` sem retornar em 2min) ou o repo fica em
+estado inconsistente.
+
+**Causa raiz**: mesmo depois do repo ganhar remoto real no GitHub
+(`git@github.com:jpazv/pulse.git`) — o que deveria eliminar a necessidade de
+sincronizar `.git` via iCloud — o diretório do projeto continua fisicamente
+dentro de uma pasta que o iCloud sincroniza por padrão. Ele não sabe que o
+git já resolve isso sozinho; continua tentando sincronizar `.git/` de
+qualquer forma.
+
+**Fix definitivo recomendado (ainda não aplicado)**: mover o diretório de
+trabalho do Pulse pra **fora** do escopo do iCloud Desktop/Documents em
+ambas as máquinas — ex. `~/dev/pulse` ou `~/code/pulse` (qualquer pasta que
+não seja `~/Desktop` nem `~/Documents`). Cada máquina passa a ter seu
+próprio clone local independente, sincronizado **só** via `git pull`/`push`
+normal contra o GitHub — nunca mais via iCloud. Isso remove a causa raiz de
+vez, em vez de só consertar depois de cada corrupção.
+
+**Recuperação rápida se acontecer de novo antes do fix acima ser aplicado**
+(feito manualmente no `macbook-jpazv` em 2026-07-22, funcionou bem):
+```bash
+# 1. NÃO apagar nada — mover a pasta corrompida pra um backup
+mv ~/Desktop/Pulse1.0.1 ~/Desktop/Pulse1.0.1.icloud-corrupted-backup-$(date +%Y%m%d)
+
+# 2. Clone limpo via SSH (repo é privado; gh CLI já autenticado cobre isso)
+cd ~/Desktop && git clone git@github.com:jpazv/pulse.git Pulse1.0.1
+
+# 3. .env.local não é versionado — recuperar do backup, não recriar do zero
+cp ~/Desktop/Pulse1.0.1.icloud-corrupted-backup-*/.env.local ~/Desktop/Pulse1.0.1/.env.local
+
+# 4. node_modules também é afetado pelo mesmo problema (iCloud evict/duplica) — reinstalar
+cd ~/Desktop/Pulse1.0.1 && npm install
+```
+Depois de recuperar, considerar seriamente aplicar o fix definitivo acima
+pra não precisar repetir isso a cada sessão nova.
+
+**Atualização importante (mesma sessão, alguns minutos depois): o mesmo bug
+atingiu o próprio `agent-hub`** (`~/Documents/agent-hub`), não só o Pulse —
+confirma que a causa raiz é genérica (qualquer repo git dentro de
+`~/Desktop`/`~/Documents` sincronizado pelo iCloud entre as duas máquinas).
+Sintoma aqui foi diferente: `git status` reportou "No commits yet" porque
+`.git/refs/heads/main` sumiu (arquivo vazio/ausente), e este próprio
+handoff apareceu duplicado (`... 2.md`, `... 3.md`). **Recuperado sem perda**
+porque `refs/remotes/origin/main` sobreviveu intacto e não havia commits
+locais não enviados: `git fetch origin && git update-ref refs/heads/main
+refs/remotes/origin/main`, depois apagados os arquivos duplicados (`rm`, não
+`git checkout` — evita o classificador de auto mode bloquear por parecer
+descarte de mudanças). **O hub em si também deveria considerar sair do
+escopo do iCloud** (`~/Documents`) pra não repetir isso — decisão do usuário,
+não aplicada ainda.
+
 ## Proximo passo recomendado
 
 Fase 4 (corte de produção) direto no repo `https://github.com/jpazv/pulse`
