@@ -2,7 +2,7 @@ projects:
   - id: pulse
     display_name: Pulse (reconstrução do tempo-resposta-app)
     path: /Users/grupovelas/Desktop/Pulse1.0.1
-    repo: null  # git local iniciado, ainda sem remoto — decidir onde hospedar
+    repo: https://github.com/jpazv/pulse
     status: active
     context: work
     agents:
@@ -11,12 +11,12 @@ projects:
       Reconstrução full-stack (Next.js+TS+Supabase) do SaaS de tempo de
       resposta no WhatsApp (projeto antigo em ~/Documents/tempo-resposta-app,
       permanece rodando em produção até o corte da Fase 4). Plano completo em
-      /Users/grupovelas/.claude/plans/wondrous-hopping-gizmo.md. Confirmado
-      que ~/Desktop/Pulse1.0.1 sincroniza via iCloud entre mac-grupovelas e
-      macbook-jpazv. Fase 0 concluída: staging linkado (pulse-staging,
-      fiswngbbjpezivneiete) e migrations aplicadas. Bloqueio único pra Fase
-      1: plano completo ainda não está numa pasta sincronizada. Ver handoff
-      mais recente: memory/handoffs/2026-07-22-pulse-rebuild-fase0-macbook.md.
+      docs/plan-reconstrucao.md dentro do próprio repo (não depende mais do
+      hub nem do iCloud). Fases 0-3 concluídas. MVP no ar em produção:
+      https://pulse-app-steel-tau.vercel.app (login demo@pulse.local /
+      demo12345, modo demo — dados estáticos, sem env vars reais da Meta
+      ainda). Próximo: Fase 4 (corte de produção). Ver handoff mais recente:
+      memory/handoffs/2026-07-22-pulse-mvp-instant-demo-e-deploy.md.
 
 # Adicione projetos aqui conforme conectar ao hub.
 # Exemplo:
