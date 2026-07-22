@@ -23,10 +23,12 @@ Last updated: 2026-07-22
 - **Pulse**: Fase 0 e Fase 1 do plano **concluidas**. Fase 1: `tenant_members` (multi-usuario por tenant), RLS policies reais, secrets movidos pro Supabase Vault, indice obsoleto dropado — tudo validado em staging com script de teste (2 tenants sinteticos, isolamento confirmado). Um bug real foi encontrado e corrigido durante a validacao: recursao infinita numa policy de RLS (`tenant_members_select`). Ver `memory/handoffs/2026-07-22-pulse-rebuild-fase1.md`.
 - **Mudanca estrutural**: `~/Desktop/Pulse1.0.1` corrompeu o `.git` local (iCloud sincronizando `.git/objects` entre as duas maquinas simultaneamente) e depois `node_modules` (mesma causa raiz). Ambos corrigidos. O projeto agora tem remoto real no GitHub (`https://github.com/jpazv/pulse`, privado) — dev daqui pra frente usa `git pull`/`push` normal, nao depende mais do iCloud pra sincronizar o `.git` entre maquinas. O plano completo tambem foi movido pra dentro do repo (`docs/plan-reconstrucao.md`), resolvendo o bloqueio anterior de ele estar numa pasta nao-sincronizada.
 - **Fase 2 (backend core) concluida**: scoring puro, webhook (fix de assinatura), Embedded Signup idempotente (portado mas SEM teste live — usuario ainda aguarda Advanced Access da Meta, decisao explicita de nao testar contra a Graph API real agora), 5 crons portados (rollup-daily, score-leads, check-alerts, detect-agendamentos, ask-compareceu). 81 testes, tsc/eslint/build limpos. Ver `memory/handoffs/2026-07-22-pulse-rebuild-fase2.md`.
-- Decisao aberta (nao bloqueia): scheduling de score-leads/detect-agendamentos/ask-compareceu (precisam rodar mais de 1x/dia) fica pra Fase 4.
+- **Fase 3 (frontend) concluida**: auth multi-usuario, dashboard completo (Rede, Espera, Conversas+CRM, Alertas real — dívida da auditoria resolvida, Secretarias CRUD novo, conexao WhatsApp). shadcn nesta versao usa Base UI, nao Radix (prop `render`, nao `asChild`). 96 testes, tsc/eslint/build limpos. Ver `memory/handoffs/2026-07-22-pulse-rebuild-fase3.md`.
+- Decisoes abertas (nao bloqueiam): scheduling de score-leads/detect-agendamentos/ask-compareceu e do pg_cron do check-alerts ficam pra Fase 4.
 
 ## Proximo passo recomendado
 
-Fase 3 (frontend) direto no repo `https://github.com/jpazv/pulse` (`git pull`
-antes de comecar, em qualquer maquina). Ver `docs/plan-reconstrucao.md` dentro
-do proprio repo pro plano completo.
+Fase 4 (corte de produção) direto no repo `https://github.com/jpazv/pulse`
+(`git pull` antes de comecar). Ver `docs/plan-reconstrucao.md` dentro do
+proprio repo pro plano completo — resolver scheduling em aberto, migrar 1
+tenant piloto, rodar em paralelo com o app antigo antes de desligar.
