@@ -6,6 +6,13 @@ machines:
     agents:
       - claude-code
     notes: maquina principal de uso diario
+  - id: macbook-jpazv
+    display_name: MacBook de Jpazv
+    role: interactive
+    os: macos
+    agents:
+      - claude-code
+    notes: extensao de trabalho, uso movel
 
 # Roles disponiveis:
 #   interactive  → uso diario, editor, terminal
