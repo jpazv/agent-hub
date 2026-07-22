@@ -20,11 +20,13 @@ Last updated: 2026-07-22
 
 ## Trabalho em andamento
 
-- **Pulse**: Fase 0 quase concluida — falta so `supabase login`/`link`/`db push` pra aplicar as migrations no staging. **Bloqueado por acao do usuario**: CLI do Supabase instalado (brew) mas `supabase login` exige fluxo interativo de navegador, nao automatizavel em sessao nao-TTY. Precisa rodar `supabase login` manualmente ou fornecer `SUPABASE_ACCESS_TOKEN`. Ver handoff mais recente pra comandos exatos.
+- **Pulse**: Fase 0 do plano **concluida**. Staging (`pulse-staging`) linkado e com as 14 migrations do projeto antigo aplicadas sem erro. Login do Supabase exigiu atencao: a primeira tentativa autenticou numa conta sem acesso a org `tnumeveypqsklzezdksf`; resolvido relogando com `jpazevedomoreiraa@grupovelas.com.br`.
+- **Bloqueio unico pra Fase 1**: o plano completo (`wondrous-hopping-gizmo.md`) esta em `/Users/grupovelas/.claude/plans/` no `mac-grupovelas`, pasta que **nao sincroniza via iCloud**. Precisa ser trazido pra uma pasta sincronizada (`~/Documents` ou `~/Desktop`) antes de continuar no `macbook-jpazv`.
 
 ## Proximo passo recomendado
 
-Resolver o bloqueio do `supabase login` (acao do usuario) e rodar
-`supabase link --project-ref fiswngbbjpezivneiete` + `supabase db push`
-seguindo `memory/handoffs/2026-07-22-pulse-rebuild-fase0-macbook.md`. Depois
-seguir pra Fase 1 do plano (tenant_members, RLS real, secrets no Vault).
+Trazer `wondrous-hopping-gizmo.md` pra uma pasta sincronizada e iniciar a
+Fase 1 do plano (migrations novas: `tenant_members`, RLS policies reais,
+mover secrets pra Vault, dropar indice obsoleto, validar isolamento
+multi-tenant com 2 tenants sinteticos em staging). Ver
+`memory/handoffs/2026-07-22-pulse-rebuild-fase0-macbook.md` pro estado exato.

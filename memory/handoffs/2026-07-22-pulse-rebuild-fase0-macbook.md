@@ -56,23 +56,51 @@ supabase link --project-ref fiswngbbjpezivneiete
 supabase db push   # aplica as 14 migrations já copiadas em supabase/migrations/
 ```
 
-## Pendente / próximo passo imediato
+## ✅ Atualização — Fase 0 concluída (mesmo dia, sessão seguinte)
 
-1. Resolver o login/link do Supabase acima (bloqueado por ação do usuário).
-2. `supabase db push` pra aplicar as migrations no staging.
-3. Validar que as migrations aplicaram sem erro (elas foram escritas pro
-   projeto antigo — checar se alguma depende de estado/dados que não existe
-   num banco novo, ex. `secretaries`, RPCs de `rede_stats`).
-4. Seguir pra **Fase 1 do plano** (migrations novas: `tenant_members`, RLS
-   policies reais, mover secrets pra Vault, dropar índice obsoleto, validar
-   isolamento multi-tenant com 2 tenants sintéticos em staging) — ver plano
-   completo em `/Users/grupovelas/.claude/plans/wondrous-hopping-gizmo.md`
-   (checar se esse arquivo está acessível neste macbook; se não, pedir pro
-   usuário reexportar/copiar).
+O bloqueio do `supabase login` foi resolvido pelo usuário. Detalhe
+importante: **a primeira tentativa de login autenticou numa conta Supabase
+errada** (sem acesso à org `tnumeveypqsklzezdksf` "Grupo Velas jpazvOrg") —
+`supabase projects list` não mostrava o `pulse-staging` e `supabase link`
+falhava com `LegacyLinkProjectStatusError` (sem privilégios). Usuário
+deslogou e logou de novo com a conta certa
+(`jpazevedomoreiraa@grupovelas.com.br`), aí sim `pulse-staging` apareceu na
+lista.
+
+Depois disso:
+
+1. `supabase link --project-ref fiswngbbjpezivneiete` — ok.
+2. `supabase db push --password <PULSE_STAGING_DB_PASSWORD>` (senha lida de
+   `.staging-supabase-credentials`) — **as 14 migrations aplicaram todas sem
+   erro** no `pulse-staging`.
+3. `supabase/.temp/` (cache local do CLI, sem segredos) adicionado ao
+   `.gitignore`.
+4. Commit `cf887a2`: "fase 0: linka staging Supabase e aplica migrations
+   iniciais".
+
+**Fase 0 do plano está concluída.** Scaffold Next.js, shadcn/ui, deps de
+dados/teste, staging Supabase linkado e com as migrations do projeto antigo
+aplicadas.
+
+## ⚠️ Único bloqueio restante antes da Fase 1
+
+**O plano completo (`wondrous-hopping-gizmo.md`) não está acessível no
+macbook-jpazv.** Ele vive em `/Users/grupovelas/.claude/plans/` no
+`mac-grupovelas`, pasta que **não sincroniza via iCloud** (diferente de
+`~/Documents` e `~/Desktop`, que sincronizam). Confirmado via busca — não
+existe cópia em `~/Documents` nem `~/Desktop` neste macbook.
+
+Pra seguir com a Fase 1 (migrations novas: `tenant_members`, RLS policies
+reais, mover secrets pra Vault, dropar índice obsoleto, validar isolamento
+multi-tenant com 2 tenants sintéticos), alguém precisa trazer esse arquivo
+pra uma pasta sincronizada — por exemplo movê-lo/copiá-lo pra dentro de
+`~/Documents` no `mac-grupovelas`, ou colar o conteúdo diretamente numa
+sessão.
 
 ## Task list desta sessão (não persiste entre sessões)
 
-7 tasks criadas no Claude Code: npm install (✅), shadcn init (✅), deps de
-dados/UI (✅), deps de teste (✅), supabase login+link (⏳ bloqueado),
-copiar migrations (✅ copiadas, mas `db push` ainda pendente — depende do
-login), commit+handoff (✅ este arquivo).
+8 tasks no Claude Code, todas resolvidas exceto a última: npm install (✅),
+shadcn init (✅), deps de dados/UI (✅), deps de teste (✅), supabase
+login+link (✅, com o desvio de conta acima), copiar migrations (✅),
+commit+handoff (✅), recuperar plano `wondrous-hopping-gizmo.md` (⏳
+bloqueado, ver acima).

@@ -13,9 +13,10 @@ projects:
       permanece rodando em produção até o corte da Fase 4). Plano completo em
       /Users/grupovelas/.claude/plans/wondrous-hopping-gizmo.md. Confirmado
       que ~/Desktop/Pulse1.0.1 sincroniza via iCloud entre mac-grupovelas e
-      macbook-jpazv. Fase 0 quase concluída, falta aplicar migrations no
-      staging (bloqueado em supabase login). Ver handoff mais recente:
-      memory/handoffs/2026-07-22-pulse-rebuild-fase0-macbook.md.
+      macbook-jpazv. Fase 0 concluída: staging linkado (pulse-staging,
+      fiswngbbjpezivneiete) e migrations aplicadas. Bloqueio único pra Fase
+      1: plano completo ainda não está numa pasta sincronizada. Ver handoff
+      mais recente: memory/handoffs/2026-07-22-pulse-rebuild-fase0-macbook.md.
 
 # Adicione projetos aqui conforme conectar ao hub.
 # Exemplo:
