@@ -1,7 +1,7 @@
 projects:
   - id: pulse
     display_name: Pulse (reconstrução do tempo-resposta-app)
-    path: ~/dev/pulse  # caminho por maquina: /Users/jp/dev/pulse (macbook-jpazv), /Users/grupovelas/dev/pulse (mac-grupovelas, ainda pendente de mover)
+    path: ~/dev/pulse  # caminho por maquina: /Users/jp/dev/pulse (macbook-jpazv), /Users/grupovelas/dev/pulse (mac-grupovelas)
     repo: https://github.com/jpazv/pulse
     status: active
     context: work
