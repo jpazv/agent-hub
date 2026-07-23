@@ -101,11 +101,29 @@ refs/remotes/origin/main`, depois apagados os arquivos duplicados (`rm`, não
 descarte de mudanças). Fix definitivo pro hub em si aplicado logo em
 seguida, ver abaixo.
 
+## Atualização 2026-07-23 (mac-grupovelas) — onboarding do Pulse Eco
+
+- Repo `pulse` **transferido** de `jpazv/pulse` pra `Grupo-Velas/pulse` —
+  atualizar qualquer referência antiga.
+- Rebranding: "Raio-X" → **Pulse Lume**; produto de atendimento WhatsApp
+  (antes "tempo de resposta") → **Pulse Eco**.
+- Onboarding comercial implementado: `raiox-mvp-html/comprar-eco.html` →
+  `api/pulse-eco-checkout.js` → `pulse/app/api/onboarding/provision` → email
+  de convite → `pulse/app/(auth)/convite` → app. Pagamento **simulado**
+  (sem conta Stripe ainda, decisão deliberada).
+- `raiox-mvp-html` ganhou git pela primeira vez nesta sessão — novo repo
+  `https://github.com/Grupo-Velas/raiox-mvp-html`. Ainda mora em
+  `~/Documents` (iCloud), não movido pra `~/dev` ainda.
+- **Pendência ativa**: deploy do `pulse-app` na Vercel travando em
+  "Building" (visto como "Blocked" no dashboard) — não resolvido. Ver
+  detalhes completos e todos os próximos passos em
+  `memory/handoffs/2026-07-23-pulse-eco-onboarding.md`.
+
 ## Proximo passo recomendado
 
-Fase 4 (corte de produção) direto no repo `https://github.com/jpazv/pulse`
-(`git pull` antes de comecar). Ver `docs/plan-reconstrucao.md` dentro do
-proprio repo pro plano completo — resolver scheduling em aberto, configurar
-env vars reais no Vercel, migrar 1 tenant piloto, rodar em paralelo com o app
-antigo antes de desligar. `.env.local` precisa ser recriado localmente em
-qualquer maquina nova (nao é versionado).
+Ver `memory/handoffs/2026-07-23-pulse-eco-onboarding.md` pra lista completa
+e ordenada. Resumo: (1) resolver deploy travado do pulse-app, (2) configurar
+redirect URL do convite no Supabase Auth, (3) testar fluxo real de ponta a
+ponta, (4) mover raiox-mvp-html pra fora do iCloud, (5) só depois retomar a
+Fase 4 (corte de produção) do plano original em `docs/plan-reconstrucao.md`
+dentro do repo `pulse`.

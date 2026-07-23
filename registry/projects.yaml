@@ -2,24 +2,47 @@ projects:
   - id: pulse
     display_name: Pulse (reconstrução do tempo-resposta-app)
     path: ~/dev/pulse  # caminho por maquina: /Users/jp/dev/pulse (macbook-jpazv), /Users/grupovelas/dev/pulse (mac-grupovelas)
-    repo: https://github.com/jpazv/pulse
+    repo: https://github.com/Grupo-Velas/pulse  # transferido de jpazv/pulse em 2026-07-23
     status: active
     context: work
     agents:
       - claude-code
     notes: >
-      Reconstrução full-stack (Next.js+TS+Supabase) do SaaS de tempo de
-      resposta no WhatsApp (projeto antigo em ~/Documents/tempo-resposta-app,
-      permanece rodando em produção até o corte da Fase 4). Plano completo em
-      docs/plan-reconstrucao.md dentro do próprio repo (não depende mais do
-      hub nem do iCloud). Fases 0-3 concluídas. MVP no ar em produção:
+      Reconstrução full-stack (Next.js+TS+Supabase) do SaaS "Pulse Eco"
+      (análise de atendimento via WhatsApp — antes chamado "tempo de
+      resposta", projeto antigo em ~/Documents/tempo-resposta-app, permanece
+      rodando em produção até o corte da Fase 4). Plano completo em
+      docs/plan-reconstrucao.md dentro do próprio repo. Fases 0-3 concluídas.
+      Nesta sessão (2026-07-23): endpoint /api/onboarding/provision +
+      página /convite — onboarding pós-"compra" do Eco (chamado pelo
+      raiox-mvp-html, ver esse projeto abaixo). MVP no ar em produção:
       https://pulse-app-steel-tau.vercel.app (login demo@pulse.local /
-      demo12345, modo demo — dados estáticos, sem env vars reais da Meta
-      ainda). Próximo: Fase 4 (corte de produção). ⚠️ Movido de
-      ~/Desktop/Pulse1.0.1 pra ~/dev/pulse em 2026-07-22 (fix definitivo pro
-      bug recorrente de corrupção do .git via iCloud — ver
-      memory/current-state.md). Ver handoff mais recente:
-      memory/handoffs/2026-07-22-pulse-mvp-instant-demo-e-deploy.md.
+      demo12345, modo demo). ⚠️ Deploy do pulse-app travado em "Building"
+      por 40+min nesta sessão (3 tentativas) — não resolvido, ver handoff
+      memory/handoffs/2026-07-23-pulse-eco-onboarding.md. Próximo: resolver
+      o deploy travado, terminar Fase 4 (corte de produção).
+
+  - id: raiox-mvp-html
+    display_name: Pulse Lume + Pulse Eco (landing/checkout)
+    path: ~/Documents/raiox-mvp-html  # ainda dentro do iCloud — não movido pra ~/dev ainda, ver risco no handoff
+    repo: https://github.com/Grupo-Velas/raiox-mvp-html
+    status: active
+    context: work
+    agents:
+      - claude-code
+    notes: >
+      Landing estática (Vercel, sem framework) que vende dois produtos:
+      "Pulse Lume" (diagnóstico financeiro, ex-"Raio-X", checkout simulado
+      via api/create-stripe-checkout.js/comprar.html) e "Pulse Eco" (análise
+      de atendimento WhatsApp — comprar-eco.html + api/pulse-eco-checkout.js,
+      que chama /api/onboarding/provision no repo pulse pra criar a conta e
+      manda o email de acesso pelo webhook interno "Connect", mesmo canal
+      que já envia o resultado do Lume). Sem conta Stripe real ainda — o
+      "pagamento" do Eco é simulado de propósito. Primeiro commit git desta
+      sessão (2026-07-23) — nunca tinha sido versionado antes, vivia só no
+      iCloud. No ar: https://raiox-mvp-html.vercel.app (aliases:
+      https://checkpulse.com.br, DNS não configurado ainda — sem acesso).
+      Ver handoff memory/handoffs/2026-07-23-pulse-eco-onboarding.md.
 
 # Adicione projetos aqui conforme conectar ao hub.
 # Exemplo:
