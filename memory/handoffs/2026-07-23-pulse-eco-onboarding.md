@@ -51,19 +51,25 @@ não processar dinheiro de verdade.
 
 ## ⚠️ Pendências reais (não resolvidas)
 
-1. **Deploy do `pulse-app` na Vercel está travado.** 3 tentativas seguidas
-   de `vercel --prod` ficaram em "Building..." por 40+ minutos cada (o
-   deploy anterior, bem-sucedido, levou 58s). Não descobri a causa raiz —
-   não tenho acesso aos logs de build detalhados via CLI, e deliberadamente
-   não tentei extrair o token de API da Vercel armazenado localmente pra
-   contornar isso (bloqueado pelo classificador de segurança quando tentei
-   o equivalente pro Supabase CLI). O usuário reportou ver "Blocked" no
-   dashboard da Vercel no último deploy — suspeita de limite de build
-   concorrente (plano Hobby, 1 build por vez) somado a múltiplos deploys
-   disparados em sequência antes do anterior terminar. **Próximo passo:
-   abrir o dashboard da Vercel (`vercel.com/jpazevedomoreiraa-1824s-projects/pulse-app`),
-   ver o motivo exato do "Blocked"/travamento, cancelar deploys presos se
-   necessário, e tentar de novo com UM deploy por vez.**
+1. **Deploy do `pulse-app` na Vercel falhou — causa raiz identificada.**
+   3 tentativas de `vercel --prod` ficaram "penduradas" em background por
+   40+ minutos cada e todas terminaram com o **mesmo erro real**, só visível
+   quando o processo finalmente retornou:
+   ```json
+   { "status": "error", "reason": "deploy_failed", "message": "Not authorized" }
+   ```
+   Ou seja: não é limite de build concorrente nem demora — é **autorização**
+   negada especificamente pro projeto `pulse-app` (a `raiox-mvp-html`
+   deployou normal com a mesma conta/CLI na mesma sessão). O usuário viu
+   "Blocked" no dashboard, consistente com isso. Hipóteses a checar no
+   macbook: permissão da conta/time na Vercel mudou pra esse projeto
+   especificamente, alguma integração Git conectada ao projeto conflitando
+   com deploy via CLI, ou billing/limite de plano específico do projeto.
+   **Próximo passo: abrir
+   `vercel.com/jpazevedomoreiraa-1824s-projects/pulse-app`, ver o deploy
+   marcado como "Blocked"/"Not authorized" e a razão exata que a Vercel dá
+   na UI (geralmente mais detalhada que a CLI), resolver a permissão, tentar
+   `vercel --prod` de novo.**
 2. **`raiox-mvp-html` já foi deployado com sucesso** (rebranding + checkout
    simulado do Eco no ar em `https://raiox-mvp-html.vercel.app`), mas as
    env vars novas (`PULSE_APP_URL`, `PULSE_PROVISIONING_SECRET`) só fazem
