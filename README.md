@@ -39,7 +39,7 @@ agent-hub/
 ## Agentes operando aqui
 
 - **Claude Code** (~/.claude/CLAUDE.md) — exploração, arquitetura, decisões
-- **Codex** (~/.codex/CODEX.md) — execução precisa, refactoring, testes
+- **Codex** (~/.codex/AGENTS.md) — execução precisa, refactoring, testes
 - **Gemini** (~/.gemini/GEMINI.md) — análise rápida, busca de padrões
 
 Veja [AGENTS.md](AGENTS.md) pra fluxo de colaboração entre agentes.

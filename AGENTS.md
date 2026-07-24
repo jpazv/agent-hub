@@ -13,7 +13,7 @@ Este hub coordena **três agentes de IA** operando na mesma máquina, lendo a me
 ### Codex
 - **Função**: execução técnica precisa, refactoring, alterações estruturadas
 - **Força**: mudanças de código precisas, testes, manutenção
-- **Entrada**: `~/.codex/CODEX.md`
+- **Entrada**: `~/.codex/AGENTS.md` (arquivo nativo que o Codex auto-carrega em toda sessao)
 - **Melhor pra**: "Muda a assinatura dessa função em 3 arquivos", refactorings, testes
 
 ### Gemini
@@ -41,7 +41,7 @@ Todos os três leem:
 
 Cada um tem seu próprio arquivo de configuração em `~/.{agent}/`:
 - `~/.claude/CLAUDE.md`
-- `~/.codex/CODEX.md`
+- `~/.codex/AGENTS.md`
 - `~/.gemini/GEMINI.md`
 
 ## Isolamento e privilégios
@@ -62,7 +62,7 @@ Quando estiver em um projeto:
 → Abra Gemini, ele lê ~/.gemini/GEMINI.md
 
 # Quero que execute uma mudança precisa
-→ Abra Codex, ele lê ~/.codex/CODEX.md
+→ Abra Codex, ele lê ~/.codex/AGENTS.md
 ```
 
 Cada um vai ler `memory/project.md` e `memory/handoffs/` automaticamente se existirem.
