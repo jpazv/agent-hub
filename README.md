@@ -42,4 +42,32 @@ agent-hub/
 - **Codex** (~/.codex/AGENTS.md) — execução precisa, refactoring, testes
 - **Gemini** (~/.gemini/GEMINI.md) — análise rápida, busca de padrões
 
+Cada IA le seu arquivo NATIVO em toda sessao, de qualquer diretorio. O
+conteudo vem de um template unico e portavel: `agents/AGENTS.md`.
+
 Veja [AGENTS.md](AGENTS.md) pra fluxo de colaboração entre agentes.
+
+## Setup em uma maquina nova (ou depois de mudar os arquivos de agente)
+
+Os arquivos nativos das IAs moram no home (`~/.codex/`, `~/.gemini/`,
+`~/.claude/`), FORA do git — o `git pull` traz o template, e o script instala:
+
+```bash
+cd <hub> && git pull            # hub-down: traz template + script atualizados
+bash scripts/setup-agents.sh    # instala nos 3 lugares nativos
+```
+
+Pre-requisito: `~/.config/agents/machine.toml` com `machine_id` e `hub_path`
+corretos da maquina.
+
+### Atalho (opcional): comando `hub-setup`
+
+Adicione ao seu `~/.zshrc` (ou `~/.bashrc`) pra nao decorar o caminho:
+
+```bash
+# Agent Hub
+alias hub-setup='bash "$(grep "^hub_path" ~/.config/agents/machine.toml | cut -d\" -f2)"/scripts/setup-agents.sh'
+alias hub-down='cd "$(grep "^hub_path" ~/.config/agents/machine.toml | cut -d\" -f2)" && git pull'
+```
+
+Depois, em qualquer maquina nova: `hub-down && hub-setup`.
