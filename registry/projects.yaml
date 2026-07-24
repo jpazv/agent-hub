@@ -24,7 +24,7 @@ projects:
 
   - id: raiox-mvp-html
     display_name: Pulse Lume + Pulse Eco (landing/checkout)
-    path: ~/Documents/raiox-mvp-html  # ainda dentro do iCloud — não movido pra ~/dev ainda, ver risco no handoff
+    path: ~/dev/raiox-mvp-html  # movido de ~/Documents/raiox-mvp-html em 2026-07-24 (ver handoff)
     repo: https://github.com/Grupo-Velas/raiox-mvp-html
     status: active
     context: work
@@ -38,11 +38,17 @@ projects:
       que chama /api/onboarding/provision no repo pulse pra criar a conta e
       manda o email de acesso pelo webhook interno "Connect", mesmo canal
       que já envia o resultado do Lume). Sem conta Stripe real ainda — o
-      "pagamento" do Eco é simulado de propósito. Primeiro commit git desta
-      sessão (2026-07-23) — nunca tinha sido versionado antes, vivia só no
-      iCloud. No ar: https://raiox-mvp-html.vercel.app (aliases:
-      https://checkpulse.com.br, DNS não configurado ainda — sem acesso).
-      Ver handoff memory/handoffs/2026-07-23-pulse-eco-onboarding.md.
+      "pagamento" do Eco é simulado de propósito. Primeiro commit git em
+      2026-07-23 (nunca tinha sido versionado antes, vivia só no iCloud);
+      movido de ~/Documents pra ~/dev em 2026-07-24 depois que
+      ~/Documents ficou inacessível (EPERM) no mac-grupovelas — ver handoff
+      2026-07-24. No ar: https://raiox-mvp-html.vercel.app (aliases:
+      https://pulse-raiox.vercel.app, https://checkpulse.com.br — DNS do
+      checkpulse não configurado, sem acesso). ⚠️ Alias curto não está
+      promovendo pro deploy mais recente (mesmo sintoma "not ready"/
+      autorização visto no pulse-app) — ver handoff 2026-07-24.
+      Handoffs: memory/handoffs/2026-07-23-pulse-eco-onboarding.md,
+      memory/handoffs/2026-07-24-css-fixes-e-icloud-lockout.md.
 
 # Adicione projetos aqui conforme conectar ao hub.
 # Exemplo:

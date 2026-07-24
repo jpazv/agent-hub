@@ -119,11 +119,31 @@ seguida, ver abaixo.
   detalhes completos e todos os próximos passos em
   `memory/handoffs/2026-07-23-pulse-eco-onboarding.md`.
 
+## Atualização 2026-07-24 (mac-grupovelas) — CSS fixes + `~/Documents` travado
+
+- `~/Documents` ficou inacessível (EPERM) no mac-grupovelas no meio da
+  sessão (não é o mesmo padrão de corrupção do iCloud dos incidentes
+  anteriores — parece permissão do macOS). `raiox-mvp-html` foi clonado
+  fresco em `~/dev/raiox-mvp-html` (já estava no GitHub) e o trabalho
+  seguiu por lá — resolve de vez a pendência de tirá-lo do iCloud.
+- Fix de CSS aplicado (subtítulo do hero desalinhado) e commitado/pushado,
+  mas **ainda não confirmado no ar** — o deploy funcionou porém o alias
+  curto (`raiox-mvp-html.vercel.app`/`pulse-raiox.vercel.app`) não
+  promoveu, mesmo sintoma "not ready" já visto no `pulse-app` ontem (ver
+  handoff 2026-07-23). Padrão se repetindo em 2 projetos — suspeitar de
+  algo na conta Vercel, não só no projeto.
+- Ajuste de espaçamento de botão no card "Eco" foi um palpite não
+  confirmado — pedir screenshot antes de insistir.
+- Detalhes completos: `memory/handoffs/2026-07-24-css-fixes-e-icloud-lockout.md`.
+
 ## Proximo passo recomendado
 
-Ver `memory/handoffs/2026-07-23-pulse-eco-onboarding.md` pra lista completa
-e ordenada. Resumo: (1) resolver deploy travado do pulse-app, (2) configurar
-redirect URL do convite no Supabase Auth, (3) testar fluxo real de ponta a
-ponta, (4) mover raiox-mvp-html pra fora do iCloud, (5) só depois retomar a
+Ver `memory/handoffs/2026-07-24-css-fixes-e-icloud-lockout.md` (mais recente)
+pra lista completa e ordenada. Resumo: (1) terminar de promover o deploy do
+raiox-mvp-html e confirmar o fix de CSS no ar, (2) investigar o padrão de
+alias/autorização falhando em 2 projetos Vercel diferentes em <24h, (3)
+resolver deploy travado do pulse-app ("Not authorized", ver handoff
+2026-07-23), (4) configurar redirect URL do convite no Supabase Auth, (5)
+testar fluxo real de onboarding ponta a ponta, (6) só depois retomar a
 Fase 4 (corte de produção) do plano original em `docs/plan-reconstrucao.md`
 dentro do repo `pulse`.
