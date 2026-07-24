@@ -136,6 +136,23 @@ seguida, ver abaixo.
   confirmado — pedir screenshot antes de insistir.
 - Detalhes completos: `memory/handoffs/2026-07-24-css-fixes-e-icloud-lockout.md`.
 
+## Atualização 2026-07-24 (mac-grupovelas) — hub multi-IA (Claude + Codex + Gemini)
+
+- Cada IA de CLI le seu proprio arquivo NATIVO em toda sessao, de qualquer
+  diretorio: Claude=`~/.claude/CLAUDE.md`, Codex=`~/.codex/AGENTS.md`,
+  Gemini=`~/.gemini/GEMINI.md`. (Codex NAO le CODEX.md — foi o erro inicial.)
+- Template unico e portavel em `agents/AGENTS.md` (versionado no hub): nao usa
+  caminho fixo, descobre o hub via `~/.config/agents/machine.toml`.
+- Script `scripts/setup-agents.sh` copia esse template pros 3 lugares nativos.
+
+### Setup em uma maquina nova (ex. macbook-jpazv)
+```bash
+cd <hub> && git pull                 # hub-down
+bash scripts/setup-agents.sh         # instala ~/.codex/AGENTS.md, ~/.gemini/GEMINI.md, ~/.claude/CLAUDE.md
+```
+Pre-requisito: `~/.config/agents/machine.toml` com `machine_id` e `hub_path`
+corretos da maquina (no macbook o hub_path e `/Users/jp/dev/agent-hub`).
+
 ## Proximo passo recomendado
 
 Ver `memory/handoffs/2026-07-24-css-fixes-e-icloud-lockout.md` (mais recente)
