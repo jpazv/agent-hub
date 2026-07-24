@@ -5,7 +5,9 @@ machines:
     os: macos
     agents:
       - claude-code
-    notes: maquina principal de uso diario
+      - codex
+      - gemini
+    notes: maquina principal de uso diario, multi-IA
   - id: macbook-jpazv
     display_name: MacBook de Jpazv
     role: interactive

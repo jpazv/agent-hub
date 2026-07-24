@@ -35,3 +35,11 @@ agent-hub/
 4. IA le a memoria do projeto e o handoff mais recente
 5. IA age com contexto completo
 6. Ao encerrar: escreve handoff se houve trabalho relevante
+
+## Agentes operando aqui
+
+- **Claude Code** (~/.claude/CLAUDE.md) — exploração, arquitetura, decisões
+- **Codex** (~/.codex/CODEX.md) — execução precisa, refactoring, testes
+- **Gemini** (~/.gemini/GEMINI.md) — análise rápida, busca de padrões
+
+Veja [AGENTS.md](AGENTS.md) pra fluxo de colaboração entre agentes.
