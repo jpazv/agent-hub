@@ -31,7 +31,9 @@ Antes de agir, leia nesta ordem (dentro de `$HUB`):
 
 - nao use o chat como unica fonte de verdade
 - **NAO** procure handoffs no Google Drive, Docs ou fontes conectadas — o hub e LOCAL, dentro de `$HUB`
-- o handoff mais recente esta em `$HUB/memory/handoffs/` (arquivo com a data mais recente no nome)
+- o handoff mais recente e o ULTIMO COMMITADO em `$HUB/memory/handoffs/`
+  (use `git log`, NAO `ls -t` — depois de um `git pull` todos os arquivos
+  ficam com a mesma data de modificacao e `ls -t` erra o mais recente)
 - detecte se a sessao esta em modo global ou de projeto
 - se estiver em projeto, leia tambem:
   - `memory/project.md`
@@ -40,11 +42,12 @@ Antes de agir, leia nesta ordem (dentro de `$HUB`):
   - o handoff mais recente em `memory/handoffs/`
 - preserve isolamento entre projetos
 
-## Como pegar o ultimo handoff do hub
+## Como pegar o ultimo handoff do hub (metodo confiavel via git)
 
 ```bash
 HUB=$(grep '^hub_path' ~/.config/agents/machine.toml | cut -d'"' -f2)
-ls -t "$HUB"/memory/handoffs/*.md | head -1 | xargs cat
+F=$(git -C "$HUB" log --name-only --pretty=format: -- 'memory/handoffs/*.md' | grep -m1 'memory/handoffs/.*\.md')
+cat "$HUB/$F"
 ```
 
 ## Regra de sync
