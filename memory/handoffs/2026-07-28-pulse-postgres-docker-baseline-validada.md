@@ -100,6 +100,125 @@ com chave injetada por transacao via `set_config(..., true)`.
 
 Baseline Postgres puro esta validada em banco descartavel local.
 
+## Continuidade — Fase B
+
+### Subpasso 1 — leitura de isolamento/IDOR
+
+Lidos:
+
+- `lib/server/auth.ts`
+- `lib/server/require-tenant.ts`
+- `app/api/dashboard/conversa/route.ts`
+- `app/api/dashboard/enviar-mensagem/route.ts`
+- `tests/auth/vincular.integration.test.ts`
+
+Achados:
+
+- `requireTenant` ainda retorna o primeiro tenant do usuario autenticado.
+- `conversa` filtra a conversa por `id + tenant_id`, mas a busca de mensagens
+  usa apenas `conversation_id`.
+- `enviar-mensagem` filtra a conversa por `id + tenant_id`, mas consultas/
+  updates derivados ainda podem ganhar filtros redundantes por `tenant_id`
+  para reduzir risco de IDOR quando a RLS sair.
+
+### Subpasso 2 — hardening IDOR inicial
+
+Arquivos alterados no `pulse`:
+
+- `app/api/dashboard/conversa/route.ts`
+- `app/api/dashboard/enviar-mensagem/route.ts`
+
+Mudancas:
+
+- Busca de mensagens da conversa agora filtra tambem por `tenant_id`.
+- Busca de `whatsapp_connections` em envio manual agora filtra tambem por
+  `tenant_id`.
+- Releitura de mensagens para score agora filtra tambem por `tenant_id`.
+- Update final de `conversations` em envio manual agora usa
+  `id + tenant_id`.
+
+Commit:
+
+```text
+6b1691c fix: tighten tenant filters on dashboard actions
+```
+
+Validacao:
+
+```text
+npx tsc --noEmit
+npm test -- tests/cron/cron-auth.test.ts
+```
+
+Resultado: ambos passaram.
+
+### Subpasso 3 — hardening de thresholds de alerta
+
+Arquivo alterado no `pulse`:
+
+- `app/api/alertas/thresholds/route.ts`
+
+Mudanca:
+
+- Update de `units.alert_thresholds_min` agora usa `id + tenant_id`.
+- A rota ja validava a unidade por tenant antes; o update ficou redundante e
+  defensivo para o cenario sem RLS.
+
+Commit:
+
+```text
+c3f3894 fix: scope alert threshold updates by tenant
+```
+
+Validacao:
+
+```text
+npx tsc --noEmit
+npm test -- tests/cron/cron-auth.test.ts
+```
+
+Resultado: ambos passaram.
+
+### Subpasso 4 — teste mocado de escopo por tenant
+
+Arquivo adicionado no `pulse`:
+
+- `tests/dashboard/tenant-scope.test.ts`
+
+Cobertura:
+
+- `app/api/dashboard/conversa/route.ts`: garante que a query de `messages`
+  usa `conversation_id + tenant_id`.
+- `app/api/alertas/thresholds/route.ts`: garante que o update de `units`
+  usa `id + tenant_id`.
+
+Objetivo:
+
+- Travar em teste unitario o padrao de isolamento que vai substituir a RLS
+  quando a camada Supabase sair.
+
+Commit:
+
+```text
+ee2fd69 test: cover tenant scope guards
+```
+
+Validacao:
+
+```text
+npm test -- tests/dashboard/tenant-scope.test.ts
+npx tsc --noEmit
+npm test
+```
+
+Resultado:
+
+```text
+9 test files passed, 12 skipped
+65 tests passed, 45 skipped
+typecheck passou
+```
+
 Proximo passo recomendado:
 
 1. Comecar Fase B pela camada de dados e testes de isolamento:
