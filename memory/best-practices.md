@@ -9,6 +9,24 @@ Entregue software simples de mudar, dificil de quebrar, seguro por padrao e
 facil de operar. Antes de alterar codigo, entenda comportamento atual,
 contratos, dados envolvidos, risco da mudanca e verificacao necessaria.
 
+## Escopo e checkpoints
+
+- Nao alterar ambiente, variavel de producao, alias de dominio, credencial,
+  schema ou fazer deploy sem pedido explicito na mensagem atual. Investigar e
+  propor nao e o mesmo que aplicar.
+- Antes de qualquer mudanca global, perguntar se o usuario quer salvar handoff.
+  Checkpoint funciona como save de videogame: existe para poder voltar, e o
+  momento de criar e ANTES da mudanca arriscada, nao depois.
+- Conta como mudanca global: variavel de producao, deploy, alias, migration,
+  rotacao de segredo, alteracao em `CLAUDE.md` ou nos arquivos do hub, e
+  refatoracao que atravessa varios modulos.
+- Criar checkpoint tambem ao concluir marco entregavel, mesmo sem mudanca
+  arriscada a seguir — handoff barato agora evita reconstrucao caro depois.
+- Nao afirmar caminho de painel, endpoint ou permissao de terceiro sem
+  confirmar na documentacao oficial.
+- Separar o que foi verificado do que foi inferido, e dizer qual e qual. Marcar
+  inferencia como inferencia, inclusive quando ela parecer obvia.
+
 ## Codigo
 
 - Prefira clareza a esperteza: nomes revelam intencao e dominio.
@@ -106,13 +124,14 @@ legibilidade. Nao bloquear por gosto; bloquear por risco concreto.
 
 ## Checklist final do agente
 
-1. Pedido mais recente foi atendido?
+1. Pedido mais recente foi atendido, e nada alem dele?
 2. Mudanca respeita padroes locais?
 3. Teste/verificacao e proporcional ao risco?
 4. Typecheck/lint/build relevantes passaram ou a falha foi explicada?
 5. Seguranca, dados, tenants e segredos foram considerados?
 6. Deploy/rollback/observabilidade foram considerados quando aplicavel?
 7. Memoria/documentacao foi atualizada quando a decisao precisa sobreviver?
+8. Havia mudanca global no caminho? Checkpoint foi oferecido antes dela?
 
 ## Referencias condensadas
 
