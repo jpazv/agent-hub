@@ -48,6 +48,7 @@ Inclui:
 - regras de boot
 - registry de projetos e maquinas
 - memoria global minima
+- boas praticas globais sempre carregadas no boot
 
 ### Projeto
 

@@ -35,6 +35,7 @@ Todos os três leem:
 - `AGENT-HUB.md` (regra mestra)
 - `ARCHITECTURE.md` (como o hub funciona)
 - `memory/current-state.md` (estado atual)
+- `memory/best-practices.md` (boas praticas globais)
 - `registry/machines.yaml` (máquinas participantes)
 - `registry/projects.yaml` (projetos)
 - `memory/handoffs/` (últimas decisões)

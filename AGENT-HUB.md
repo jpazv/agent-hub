@@ -24,6 +24,7 @@ Sempre carregar:
 - `README.md`
 - `ARCHITECTURE.md`
 - `memory/current-state.md`
+- `memory/best-practices.md`
 - `registry/machines.yaml`
 - `registry/projects.yaml`
 - `machine.toml` local da maquina

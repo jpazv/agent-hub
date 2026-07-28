@@ -19,6 +19,7 @@ agent-hub/
   ARCHITECTURE.md             ← arquitetura do ecossistema
   memory/
     current-state.md          ← estado atual
+    best-practices.md         ← boas praticas globais sempre lidas no boot
   registry/
     machines.yaml             ← maquinas participantes
     projects.yaml             ← projetos registrados
@@ -30,7 +31,7 @@ agent-hub/
 ## Fluxo minimo de uma sessao
 
 1. IA abre → le o cerebro global
-2. Cerebro aponta para o hub → IA le AGENT-HUB.md e memory/current-state.md
+2. Cerebro aponta para o hub → IA le AGENT-HUB.md, memory/current-state.md e memory/best-practices.md
 3. IA identifica o projeto pelo diretorio atual
 4. IA le a memoria do projeto e o handoff mais recente
 5. IA age com contexto completo

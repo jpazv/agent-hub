@@ -1,13 +1,15 @@
-# Handoff — Boas praticas: complexidade ciclomatica de McCabe
+# Boas Praticas Globais
 
 **Data:** 2026-07-28  
 **Maquina:** mac-grupovelas  
-**Tipo:** conhecimento / boas praticas de engenharia  
-**Escopo:** qualidade de codigo, testes, refatoracao
+**Tipo:** memoria permanente de engenharia  
+**Escopo:** qualidade de codigo, testes, refatoracao  
+**Regra:** este arquivo deve ser lido em todo boot, depois da memoria global
+minima do hub.
 
 ---
 
-## Tema
+## Complexidade ciclomatica de McCabe
 
 Complexidade ciclomatica de McCabe e uma metrica criada por Thomas J.
 McCabe em 1976 para medir a complexidade estrutural de um trecho de codigo.

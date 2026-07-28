@@ -23,9 +23,10 @@ Antes de agir, leia nesta ordem (dentro de `$HUB`):
 2. `$HUB/README.md`
 3. `$HUB/ARCHITECTURE.md`
 4. `$HUB/memory/current-state.md`
-5. `$HUB/registry/machines.yaml`
-6. `$HUB/registry/projects.yaml`
-7. `~/.config/agents/machine.toml`
+5. `$HUB/memory/best-practices.md`
+6. `$HUB/registry/machines.yaml`
+7. `$HUB/registry/projects.yaml`
+8. `~/.config/agents/machine.toml`
 
 ## Regra de boot
 
