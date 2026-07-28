@@ -219,6 +219,47 @@ Resultado:
 typecheck passou
 ```
 
+### Subpasso 5 — helper Postgres para segredos WhatsApp
+
+Arquivos alterados/adicionados no `pulse`:
+
+- `lib/server/db.ts`
+- `lib/server/pg-meta-secrets.ts`
+- `tests/server/pg-meta-secrets.integration.test.ts`
+
+Mudancas:
+
+- Criado helper paralelo `getWhatsappSecretPg` / `setWhatsappSecretPg`.
+- Helper usa `PULSE_SECRETS_KEY` fora do banco.
+- A chave e injetada por transacao com
+  `set_config('pulse.secrets_key', $1, true)`.
+- `lib/server/db.ts` ganhou `closePool()` para encerrar conexoes em testes.
+- Runtime atual ainda nao foi trocado: `meta-secrets.ts` Supabase continua em
+  uso ate as rotas serem portadas para `pg`.
+
+Commit:
+
+```text
+78aef9e feat: add postgres whatsapp secret helpers
+```
+
+Validacao:
+
+```text
+DATABASE_URL="postgres://pulse:pulse@localhost:5432/pulse" npm test -- tests/server/pg-meta-secrets.integration.test.ts
+npx tsc --noEmit
+npm test
+```
+
+Resultado:
+
+```text
+pg-meta-secrets integration: 2 passed
+suite comum: 9 passed, 13 skipped
+65 tests passed, 47 skipped
+typecheck passou
+```
+
 Proximo passo recomendado:
 
 1. Comecar Fase B pela camada de dados e testes de isolamento:
