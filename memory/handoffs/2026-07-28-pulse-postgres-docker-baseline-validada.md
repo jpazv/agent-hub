@@ -260,6 +260,44 @@ suite comum: 9 passed, 13 skipped
 typecheck passou
 ```
 
+### Subpasso 6 — hardening de tenant em crons de escrita
+
+Arquivos alterados no `pulse`:
+
+- `app/api/cron/score-leads/route.ts`
+- `app/api/cron/detect-agendamentos/route.ts`
+- `app/api/cron/ask-compareceu/route.ts`
+
+Mudancas:
+
+- `score-leads`: busca de mensagens agora restringe tambem por tenants do
+  lote; update de `conversations` usa `id + tenant_id`.
+- `detect-agendamentos`: busca de mensagens outbound usa
+  `conversation_id + tenant_id`; update usa `id + tenant_id`.
+- `ask-compareceu`: buscas de conexoes/destinatarios usam `unit_id + tenant_id`;
+  update usa `id + tenant_id`.
+
+Commit:
+
+```text
+dd4c522 fix: scope cron conversation writes by tenant
+```
+
+Validacao:
+
+```text
+npx tsc --noEmit
+npm test
+```
+
+Resultado:
+
+```text
+9 test files passed, 13 skipped
+65 tests passed, 47 skipped
+typecheck passou
+```
+
 Proximo passo recomendado:
 
 1. Comecar Fase B pela camada de dados e testes de isolamento:
