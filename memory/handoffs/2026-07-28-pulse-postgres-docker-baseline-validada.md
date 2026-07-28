@@ -298,6 +298,74 @@ Resultado:
 typecheck passou
 ```
 
+### Subpasso 7 — escolha da primeira rota a portar para `pg`
+
+Lidas:
+
+- `app/api/dashboard/overview/route.ts`
+- `app/api/dashboard/espera/route.ts`
+- `lib/server/live-stats.ts`
+
+Decisao:
+
+- Comecar por `/api/dashboard/espera`, por ser leitura pequena, com contrato
+  simples e sem RPC.
+- Objetivo: substituir `getSupabaseAdmin().from("conversations")` por SQL
+  puro via `lib/server/db.ts`.
+
+### Subpasso 8 — `/api/dashboard/espera` portada para `pg`
+
+Arquivo alterado no `pulse`:
+
+- `app/api/dashboard/espera/route.ts`
+
+Mudancas:
+
+- Removido `getSupabaseAdmin` da rota.
+- Consulta agora usa SQL parametrizado via `lib/server/db.ts`.
+- `units` usa `left join` com `tenant_id` para evitar perda silenciosa de linha
+  e manter isolamento.
+- `numeric` (`temperatura_lead`) e convertido explicitamente para number no
+  contrato JSON.
+- Erro de banco continua retornando `{ ok:false }` com status 500.
+
+### Subpasso 9 — teste de integracao pg para `/api/dashboard/espera`
+
+Arquivo adicionado no `pulse`:
+
+- `tests/dashboard/espera-pg.integration.test.ts`
+
+Cobertura:
+
+- Semeia dois tenants no Postgres Docker.
+- Mocka apenas `requireTenant` para simular tenant autenticado.
+- Garante que `/api/dashboard/espera` retorna somente conversa do tenant
+  autenticado.
+- Garante que `unit_id` de outro tenant retorna fila vazia.
+
+Commit:
+
+```text
+f178496 feat: port dashboard wait queue to pg
+```
+
+Validacao:
+
+```text
+DATABASE_URL="postgres://pulse:pulse@localhost:5432/pulse" npm test -- tests/dashboard/espera-pg.integration.test.ts
+npx tsc --noEmit
+npm test
+```
+
+Resultado:
+
+```text
+espera pg integration: 2 passed
+suite comum: 9 passed, 14 skipped
+65 tests passed, 49 skipped
+typecheck passou
+```
+
 Proximo passo recomendado:
 
 1. Comecar Fase B pela camada de dados e testes de isolamento:
