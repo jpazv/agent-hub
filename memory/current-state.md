@@ -1,6 +1,6 @@
 # Current State
 
-Last updated: 2026-07-22
+Last updated: 2026-07-28
 
 ## Onde estamos
 
@@ -153,14 +153,39 @@ bash scripts/setup-agents.sh         # instala ~/.codex/AGENTS.md, ~/.gemini/GEM
 Pre-requisito: `~/.config/agents/machine.toml` com `machine_id` e `hub_path`
 corretos da maquina (no macbook o hub_path e `/Users/jp/dev/agent-hub`).
 
+## ⚠️ FASE ATUAL (28/07/2026): migração Supabase → Postgres puro
+
+**Decisão tomada.** O Pulse sai do Supabase para Postgres gerenciado próprio no
+AWS RDS. Toda sessão nova deve assumir **Postgres puro** como destino.
+
+`docs/plan-reconstrucao.md` dentro do repo `pulse` está **desatualizado nesse
+ponto** — ele assume Supabase como banco + Auth (premissa da linha 18 e linha
+31). Não seguir aquele documento para decisões de infraestrutura.
+
+Handoff da migração:
+`memory/handoffs/2026-07-28-migracao-postgres-puro.md`
+Plano completo: `~/.claude/plans/delightful-sprouting-karp.md`
+
+Escolhas: SQL puro com `pg` (sem ORM) · auth própria em `app_auth` com token
+opaco de sessão · isolamento **na aplicação** (RLS removida) · segredos em
+`pgcrypto` com chave fora do banco · baseline de schema consolidado · corte seco
+sem migrar dado.
+
+Ordem: Fase A (fundação) → Fase B (camada de dados) → Fase C (auth, por último e
+de propósito, por ser o maior risco).
+
 ## Proximo passo recomendado
 
-Ver `memory/handoffs/2026-07-24-css-fixes-e-icloud-lockout.md` (mais recente)
-pra lista completa e ordenada. Resumo: (1) terminar de promover o deploy do
-raiox-mvp-html e confirmar o fix de CSS no ar, (2) investigar o padrão de
-alias/autorização falhando em 2 projetos Vercel diferentes em <24h, (3)
-resolver deploy travado do pulse-app ("Not authorized", ver handoff
-2026-07-23), (4) configurar redirect URL do convite no Supabase Auth, (5)
-testar fluxo real de onboarding ponta a ponta, (6) só depois retomar a
-Fase 4 (corte de produção) do plano original em `docs/plan-reconstrucao.md`
-dentro do repo `pulse`.
+Executar a Fase A do plano de migração: camada `pg` com os type parsers (o
+driver devolve `numeric` como string e `date` como objeto `Date`, diferente do
+PostgREST — é o risco silencioso de maior alcance), runner de migrations com
+validação de checksum, baseline de schema, e a correção do bypass do
+`verifyCronSecret`.
+
+Pendências anteriores que seguem abertas e **não** são afetadas pela migração:
+(1) rotacionar `META_APP_SECRET`, que circulou em texto plano; (2) Embedded
+Signup bloqueado por Acesso Avançado da Meta (`#2655111`) — ver handoff de
+2026-07-27, incluindo o achado do webhook override e a proposta ao parceiro;
+(3) responsividade mobile implementada mas não verificada visualmente;
+(4) `WHATSAPP_VERIFY_TOKEN`/`WHATSAPP_APP_SECRET` setadas no Vercel mas não
+deployadas — o webhook rejeita tudo até o próximo deploy.
