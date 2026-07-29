@@ -174,13 +174,20 @@ sem migrar dado.
 Ordem: Fase A (fundação) → Fase B (camada de dados) → Fase C (auth, por último e
 de propósito, por ser o maior risco).
 
-## Proximo passo recomendado
+## Atualização 2026-07-29 (mac-grupovelas) — Pulse Fase B Postgres avançada
 
-Executar a Fase A do plano de migração: camada `pg` com os type parsers (o
-driver devolve `numeric` como string e `date` como objeto `Date`, diferente do
-PostgREST — é o risco silencioso de maior alcance), runner de migrations com
-validação de checksum, baseline de schema, e a correção do bypass do
-`verifyCronSecret`.
+Fase A concluída. Fase B avançou bastante: dashboard, alertas, secretárias,
+webhook em tempo real, envio manual, rollup diário, score-leads e
+detect-agendamentos já foram portados para `pg` com testes Postgres locais.
+Repo `~/dev/pulse` está limpo e `main` está à frente de `origin/main` por 21
+commits. Handoff detalhado:
+`memory/handoffs/2026-07-29-pulse-fase-b-postgres-parcial-e-meta-override.md`.
+
+Próxima decisão antes de continuar mecanicamente: o usuário sinalizou que talvez
+vamos mudar o foco para deixar o onboarding pronto em outro app já registrado na
+Meta usando override URL. Confirmar se a próxima sessão segue nos crons restantes
+(`check-alerts`, `ask-compareceu`) ou se prioriza onboarding/Embedded Signup
+Meta com override URL.
 
 Pendências anteriores que seguem abertas e **não** são afetadas pela migração:
 (1) rotacionar `META_APP_SECRET`, que circulou em texto plano; (2) Embedded
