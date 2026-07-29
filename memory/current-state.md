@@ -189,3 +189,17 @@ Signup bloqueado por Acesso Avançado da Meta (`#2655111`) — ver handoff de
 (3) responsividade mobile implementada mas não verificada visualmente;
 (4) `WHATSAPP_VERIFY_TOKEN`/`WHATSAPP_APP_SECRET` setadas no Vercel mas não
 deployadas — o webhook rejeita tudo até o próximo deploy.
+
+## Atualização 2026-07-29 (mac-grupovelas) — landing do Pulse: mockup finalizado
+
+Landing (`~/dev/raiox-mvp-html`, `checkpulse.com.br`) refeita com mockup
+MacBook+iPhone no Hero usando prints reais do produto (não mais CSS puro), 7
+seções, paywall removido **do produto de verdade** (não só de screenshot).
+**Nada commitado ainda** — pendente confirmação do usuário para
+commit/push. Detalhe completo:
+`memory/handoffs/2026-07-29-landing-mockup-finalizado.md`.
+
+Esse mesmo handoff aponta o próximo passo de volta para a **Fase B da migração
+Postgres** (isolamento tenant + porte das rotas de maior risco de IDOR) — a
+frente ativa do projeto `~/dev/pulse` continua sendo essa, a landing foi um
+desvio pontual já concluído.
