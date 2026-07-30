@@ -210,3 +210,49 @@ Esse mesmo handoff aponta o próximo passo de volta para a **Fase B da migraçã
 Postgres** (isolamento tenant + porte das rotas de maior risco de IDOR) — a
 frente ativa do projeto `~/dev/pulse` continua sendo essa, a landing foi um
 desvio pontual já concluído.
+
+## ⚠️ Atualização 2026-07-29 (mac-grupovelas) — FASE B FECHADA + pentest de segurança
+
+**A Fase B da migração Postgres está concluída.** Todas as rotas operacionais e
+os 5 crons ativos usam Postgres puro. `main` do `~/dev/pulse` está sincronizado
+com `origin/main` em `630d7b8`, working tree limpo, 138 testes passando.
+
+Segue em Supabase por design (não é atraso): onboarding (`units`, `provision`,
+`signup`), auth (`lib/server/auth.ts`, `vincular`, front de auth) e o legado
+`supabase-admin.ts`. Fase C (auth própria) **não começou**.
+
+**Dois bugs graves corrigidos nesta sessão, ambos provados por exploit:**
+1. Banco partido no caminho do lead — onboarding gravava a connection no
+   Supabase e o webhook lia do Postgres, então mensagem de lead real era
+   descartada em silêncio. Corrigido.
+2. Sequestro de conexão de WhatsApp entre clínicas (IDOR) — um tenant assumia a
+   conexão de outro passando o `phone_number_id` dela (não é segredo). Era
+   **pré-existente** na versão Supabase e foi reproduzido no port 1:1.
+3. O consentimento de conteúdo era **cosmético** — o texto da mensagem do
+   paciente era persistido na coluna `payload` sem passar pelo gate, e ia
+   inteiro para o log da plataforma junto do telefone (LGPD art. 11).
+
+Também: chave-mestra de cifra saiu do banco (era parâmetro de query, podia cair
+no log do Postgres → AES-256-GCM no Node), resolvida a ambiguidade das duas
+implementações de cripto de segredos, idempotência de reentrega de webhook,
+tenant ativo determinístico, comparações constant-time e rate limit.
+
+Handoff completo, com as 5 pendências de segurança que precisam de decisão:
+`memory/handoffs/2026-07-29-pulse-fase-b-fechada-e-pentest-seguranca.md`
+
+**Lição de método registrada lá:** um pentest meu passou vacuamente (passava com
+a proteção desligada). Todo teste de segurança precisa ser verificado nos dois
+sentidos — falha sem a correção, passa com ela.
+
+### Próximo passo
+
+Onboarding Meta via app do parceiro com `override_callback_uri`. Plano completo
+em `~/dev/pulse/docs/plan-onboarding-meta-partner-app.md`. A Fase 1 dele
+(tabela `meta_app_credentials`) não depende de ninguém e pode começar; a Fase 3
+(webhook multi-credencial) está **bloqueada** pela resposta do parceiro sobre
+compartilhar o App Secret — a Meta assina o webhook com o secret do app
+inscrito na WABA, então sem ele a validação HMAC falha.
+
+**Não estaríamos prontos para dar o webhook amanhã:** não existe Postgres de
+produção (só Docker local), `DATABASE_URL`/`PULSE_SECRETS_KEY` não estão no
+Vercel, e falta o App Secret do parceiro.
