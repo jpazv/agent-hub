@@ -366,6 +366,48 @@ suite comum: 9 passed, 14 skipped
 typecheck passou
 ```
 
+### Subpasso 10 — inicio do porte de `/api/dashboard/overview`
+
+Arquivo alvo:
+
+- `app/api/dashboard/overview/route.ts`
+
+Motivo:
+
+- Rota de leitura, sem RPC, dependente apenas de `conversations`.
+- Exercita `numeric` como string no `pg`, datas como string, filtro por
+  `tenant_id` e filtro opcional por `unit_id`.
+
+### Subpasso 11 — `/api/dashboard/overview` portada para `pg`
+
+Arquivo alterado no `pulse`:
+
+- `app/api/dashboard/overview/route.ts`
+
+Mudancas:
+
+- Removido `getSupabaseAdmin` da rota.
+- Respondidos do dia e fila de espera agora usam SQL parametrizado via
+  `lib/server/db.ts`.
+- Filtro obrigatorio por `tenant_id` e opcional por `unit_id`.
+- `numeric` (`tpr_minutos`) e convertido explicitamente para number antes de
+  `computeDailyStats` e buckets.
+- Erro de banco continua retornando `{ ok:false }` com status 500.
+
+### Subpasso 12 — teste de integracao pg para `/api/dashboard/overview`
+
+Arquivo adicionado no `pulse`:
+
+- `tests/dashboard/overview-pg.integration.test.ts`
+
+Cobertura:
+
+- Semeia dois tenants no Postgres Docker.
+- Garante que estatisticas de hoje, buckets e fila consideram apenas o tenant
+  autenticado.
+- Garante filtro por `unit_id` dentro do tenant.
+- Valida conversoes numericas no contrato JSON.
+
 Proximo passo recomendado:
 
 1. Comecar Fase B pela camada de dados e testes de isolamento:
