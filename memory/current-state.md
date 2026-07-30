@@ -256,3 +256,17 @@ inscrito na WABA, então sem ele a validação HMAC falha.
 **Não estaríamos prontos para dar o webhook amanhã:** não existe Postgres de
 produção (só Docker local), `DATABASE_URL`/`PULSE_SECRETS_KEY` não estão no
 Vercel, e falta o App Secret do parceiro.
+
+## Atualização 2026-07-30 — tudo sincronizado, trabalho segue no MacBook
+
+Os três repos estão limpos e sincronizados com o GitHub: `agent-hub`,
+`pulse` (`630d7b8`) e `raiox-mvp-html` (`5499ce6` — a landing com o mockup do
+iPhone foi commitada e pushada, não está mais presa em máquina local).
+
+Handoff de continuidade, com o setup do Docker/Postgres necessário na máquina
+nova e o próximo passo: `memory/handoffs/2026-07-30-continuidade-no-macbook.md`.
+
+Próximo passo é a **Fase 1** do plano de onboarding Meta
+(`~/dev/pulse/docs/plan-onboarding-meta-partner-app.md`) — tabela
+`meta_app_credentials` e colunas novas em `whatsapp_connections`. Não depende do
+parceiro nem de infra. A **Fase 3 segue bloqueada** pelo App Secret do parceiro.
