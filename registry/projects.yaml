@@ -50,6 +50,31 @@ projects:
       Handoffs: memory/handoffs/2026-07-23-pulse-eco-onboarding.md,
       memory/handoffs/2026-07-24-css-fixes-e-icloud-lockout.md.
 
+  - id: lead-quality-score
+    display_name: Score de Qualidade de Atendimento (experimento)
+    path: projects/lead-quality-score  # vive DENTRO do hub, nao tem repo proprio
+    repo: null  # promover a repo proprio no Grupo-Velas se sair da fase de teste
+    status: active
+    context: work
+    agents:
+      - claude-code
+    notes: >
+      Experimento de analise sobre o Metabase do Grupo Velas — NAO e o Pulse.
+      Testa se uma metrica de qualidade de atendimento melhor que a atual
+      adiciona poder explicativo a conversao de lead. Somente leitura: nada e
+      escrito no BD Grupo Velas (guarda em mb._assert_readonly bloqueia
+      qualquer coisa que nao seja SELECT/WITH). Entrega em Excel, em
+      projects/lead-quality-score/output/.
+      Rodar: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt,
+      gravar token do Metabase em .metabase_session (gitignored, NAO commitar),
+      .venv/bin/python extract.py (~4min, gera cache/ que nao e versionado),
+      depois analyze.py / regressao.py / comparativo.py (~40s cada).
+      Resultado principal: a qualidade agrega apenas 0,48% de R2 unico sobre a
+      temperatura; volume de conversa domina; %CVS e alvo contaminado (+65% de
+      agendamentos nao rastreaveis); 57% da base cega por falta de transcricao
+      de midia. Detalhes e proximos passos no handoff
+      memory/handoffs/2026-08-05-lead-quality-score-experimento.md.
+
 # Adicione projetos aqui conforme conectar ao hub.
 # Exemplo:
 #   - id: meu-projeto
