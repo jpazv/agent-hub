@@ -29,9 +29,37 @@ ENV_FILE="$HOME/.config/agents/google-oauth.env"
 WRAPPER="$HOME/.config/agents/google-workspace-mcp.sh"
 
 if [ ! -f "$ENV_FILE" ]; then
-  echo "ERRO: $ENV_FILE nao existe."
-  echo "Crie-o com GOOGLE_OAUTH_CLIENT_ID e GOOGLE_OAUTH_CLIENT_SECRET antes de rodar."
-  exit 1
+  echo "Credenciais nao encontradas nesta maquina."
+  echo
+  echo "Pegue-as em: Google Cloud Console > APIs e servicos > Credenciais"
+  echo "  projeto 538719293602 > OAuth 2.0 Client IDs > (o client Desktop)"
+  echo "O client_secret pode ser lido de novo la a qualquer momento — nao"
+  echo "precisa copiar de outra maquina, e nao deve trafegar por chat/git."
+  echo
+
+  printf 'GOOGLE_OAUTH_CLIENT_ID: '
+  read -r CLIENT_ID
+  printf 'GOOGLE_OAUTH_CLIENT_SECRET (nao aparece na tela): '
+  read -rs CLIENT_SECRET
+  echo
+
+  if [ -z "$CLIENT_ID" ] || [ -z "$CLIENT_SECRET" ]; then
+    echo "ERRO: os dois valores sao obrigatorios."
+    exit 1
+  fi
+
+  mkdir -p "$(dirname "$ENV_FILE")"
+  umask 077
+  cat > "$ENV_FILE" <<ENV_EOF
+# Credenciais OAuth do Google para o MCP workspace-mcp
+# Tipo de cliente: OAuth client ID (Desktop app)
+# NUNCA commitar este arquivo. Ele vive fora do repo do hub de proposito.
+
+export GOOGLE_OAUTH_CLIENT_ID="$CLIENT_ID"
+export GOOGLE_OAUTH_CLIENT_SECRET="$CLIENT_SECRET"
+ENV_EOF
+  echo "Gravado em $ENV_FILE"
+  echo
 fi
 
 chmod 600 "$ENV_FILE"

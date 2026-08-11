@@ -131,6 +131,28 @@ editar o documento:
 
 ---
 
+## 2.5 Continuar noutra maquina (mac mini / mac-grupovelas)
+
+O trabalho viaja pelo git; **a credencial e o token do Google nao** — de
+proposito. Numa maquina nova:
+
+```bash
+cd <hub> && git pull                    # hub-down
+bash scripts/setup-google-mcp.sh        # pergunta client_id/secret e registra o MCP
+```
+
+O script agora **pergunta as credenciais** se nao encontrar
+`~/.config/agents/google-oauth.env`, grava com `umask 077` e registra o MCP no
+escopo `user`. Nao copiar o env de outra maquina nem mandar o secret por chat:
+ele pode ser lido de novo no Google Cloud Console (projeto `538719293602` >
+Credenciais > o client Desktop) a qualquer momento.
+
+Depois: reiniciar o Claude Code e refazer o consentimento OAuth naquela maquina
+(o token e cacheado por maquina, nao sincroniza).
+
+Pre-requisito da maquina, se for a primeira vez: `~/.config/agents/machine.toml`
+com `machine_id`/`hub_path` corretos e `bash scripts/setup-agents.sh`.
+
 ## 3. Perguntas abertas com o JP
 
 1. **Em qual conta Google o Doc deve viver** — `isabellavfreirer@gmail.com`
