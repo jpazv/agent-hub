@@ -69,6 +69,24 @@ O device flow **nao funciona** pelo bash do agente (a saida com o codigo nao
 aparece) — o JP precisa rodar num terminal proprio. O codigo e impresso pelo
 `gh` no terminal, nao vem de app de celular.
 
+## Google (Docs + Drive) — MCP no escopo `user`
+
+O acesso ao Google Workspace e um MCP instalado por maquina, no escopo `user` do
+Claude Code (carrega em toda sessao, de qualquer diretorio).
+
+Instalar numa maquina nova:
+
+```bash
+bash scripts/setup-google-mcp.sh
+```
+
+Pre-requisito: `~/.config/agents/google-oauth.env` com
+`GOOGLE_OAUTH_CLIENT_ID` e `GOOGLE_OAUTH_CLIENT_SECRET`, `chmod 600`.
+
+**Esse arquivo nunca entra no hub.** O `.gitignore` do repo so cobre `.DS_Store`
+— qualquer segredo commitado aqui vai para o GitHub e fica no historico. O hub
+carrega o roteiro; o segredo fica local em cada maquina.
+
 ## Se estiver em um projeto
 
 Carregar tambem:

@@ -1,1 +1,6 @@
 .DS_Store
+
+# segredos — nunca versionar
+*.env
+*-oauth.env
+*credentials*.json
