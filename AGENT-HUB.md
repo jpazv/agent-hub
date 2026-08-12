@@ -107,6 +107,20 @@ Operar em modo global do hub. Nao inventar contexto de projeto.
 - tratar segredos como locais
 - usar handoff estruturado em vez de depender de memoria de conversa
 
+## Handoff automatico antes de compactar
+
+Quando o contexto atingir **90% do limite** (faltando ~10% para auto-compact),
+o agente DEVE criar um handoff automaticamente em `$HUB/memory/handoffs/`
+antes de perder contexto. O handoff deve conter:
+
+1. O que foi feito na sessao (decisoes, alteracoes, cards criados/editados)
+2. O que ficou pendente (proximos passos concretos)
+3. IDs relevantes (dashboards, cards, tabelas, endpoints)
+4. Erros encontrados e como foram resolvidos
+
+Formato do arquivo: `YYYY-MM-DD-<slug-descritivo>.md`
+Commitar no hub apos salvar (`git add + commit`).
+
 ## Metabase Hub — boot automatico
 
 Carregar `$HUB/memory/metabase-boot.md` em TODA sessao.
