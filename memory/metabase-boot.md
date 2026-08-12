@@ -11,15 +11,22 @@ Carregar em toda sessão que envolva Metabase, dashboards ou BI.
 - **NUNCA** sugerir nem executar alterações de schema (ALTER, CREATE TABLE, ADD COLUMN, etc.)
 - **Eficiência de tokens:** agrupar todas as alterações de cards/dashboards num único script Python. Suprimir output de resposta da API (só status code). Evitar GET antes de PUT quando já se sabe o payload. Nunca imprimir JSON inteiro de resposta no terminal.
 
-### Como obter token
+### Token ativo
 
+```
+MB_TOKEN=35cc2098-9ca6-4a1e-8388-22ec60a12116
+```
+
+Login: `jp@grupovelas.com.br` / `Lara1212@@`
+
+Se expirar, renovar:
 ```bash
 curl -s https://metabase.grupovelas.com.br/api/session \
   -H 'Content-Type: application/json' \
-  -d '{"username":"jpazevedomoreiraa@grupovelas.com.br","password":"PEDIR_AO_JP"}' | jq -r .id
+  -d '{"username":"jp@grupovelas.com.br","password":"Lara1212@@"}' | jq -r .id
 ```
 
-O token dura dias. Verificar validade:
+Verificar validade:
 
 ```bash
 curl -s -o /dev/null -w '%{http_code}' \
