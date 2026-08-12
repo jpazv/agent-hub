@@ -29,6 +29,7 @@ Sempre carregar:
 - `registry/machines.yaml`
 - `registry/projects.yaml`
 - `machine.toml` local da maquina
+- `memory/metabase-boot.md`
 
 ## Kanban — conectar em TODA sessao
 
@@ -105,6 +106,34 @@ Operar em modo global do hub. Nao inventar contexto de projeto.
 - preservar isolamento entre projetos
 - tratar segredos como locais
 - usar handoff estruturado em vez de depender de memoria de conversa
+
+## Metabase Hub — boot automatico
+
+Carregar `$HUB/memory/metabase-boot.md` em TODA sessao.
+O JSON completo (`~/Downloads/Metabase-hub/mapa_metabase.json`) contem
+256 dashboards com cards, tabelas, modelos e filtros — ler sob demanda
+quando precisar de IDs ou detalhes especificos.
+
+Fontes:
+
+- **Boot (sempre):** `$HUB/memory/metabase-boot.md`
+  (token, IDs-chave, filtros padrao, comandos uteis da API)
+- **JSON completo (sob demanda):** `~/Downloads/Metabase-hub/mapa_metabase.json`
+  (256 dashboards, cards, tabelas, modelos, filtros)
+- **Pagina visual:** `~/Downloads/Metabase-hub/mapa-metabase.html`
+  (abrir no browser, funciona offline)
+
+### Sync incremental
+
+1. `GET /api/dashboard` (1 chamada, leve) — retorna `updated_at` de cada dash
+2. Comparar com `updated_at` salvo no JSON
+3. Re-crawlar so os alterados + detectar novos/deletados
+4. Salvar JSON atualizado
+
+### Regra de uso da API
+
+**Somente SELECT** — proibido ALTER/CREATE/DELETE/UPDATE no banco.
+Escrita via API (editar dashcards, mover cards) e permitida.
 
 ## Regra de sync
 
