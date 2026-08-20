@@ -30,8 +30,14 @@ Sempre carregar:
 - `registry/projects.yaml`
 - `machine.toml` local da maquina
 - `memory/metabase-boot.md`
+- `plugins/github/README.md`  ← ler kanban + criar card padronizado
 
 ## Kanban — conectar em TODA sessao
+
+**Como LER o kanban e como CRIAR card padronizado esta em `plugins/github/README.md`:**
+template de titulo `[Projeto] Atividade`, campos obrigatorios a coletar, IDs de
+Status / Setor / Prioridade / Tipo do board, e scripts prontos em bash/`gh` e
+PowerShell. Carregar no boot — nao reinventar o formato do card.
 
 Toda sessao comeca conectada ao kanban do GitHub e abre reportando as tasks
 abertas do JP. Nao esperar o usuario pedir.
