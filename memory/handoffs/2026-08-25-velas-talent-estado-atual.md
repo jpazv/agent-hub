@@ -706,3 +706,73 @@ Só com política confirmada executar `docker restart -t 30 <container>` ou, com
 último recurso, terminar o PID 1 e deixar o runtime recuperar o processo. Não
 usar `docker.sock` como atalho. O deploy continua pendente até haver restart
 controlado e smoke test de `/api/health`, login, triagem e convite.
+
+## 16 — Emails, OpenRouter e verificações locais (2026-08-25)
+
+### Emails
+
+- O JSON `~/Downloads/Produção D-1 — Relatório Diário-2.json` contém HTML e uma
+  chamada HTTP para `sub-enviar-email`, mas **não contém credenciais**; apenas
+  referencia `httpHeaderAuth` do n8n.
+- O shell visual VelasConnect foi reaproveitado em `corporate-email.ts`:
+  fundo azul escuro, logo Grupo Velas, cabeçalho azul, conteúdo central e rodapé.
+- Foi criado `apps/api/src/integrations/email/email.delivery.ts`:
+  - Gmail API direto é primário quando `GMAIL_REFRESH_TOKEN` + OAuth existem.
+  - Provider HTTP compatível com payload Resend é alternativa direta quando
+    `EMAIL_HTTP_API_KEY` + `EMAIL_FROM` existem.
+  - n8n permanece fallback.
+  - `EMAIL_TEST_OVERRIDE` também vale para o caminho direto.
+- Convite, confirmação, negativa e alerta de banco de talentos usam o adaptador.
+- Criado `npm run email:sink`: sink local em `127.0.0.1:8787` que valida Bearer,
+  payload e grava em `/tmp/velas-talent-email-sink.jsonl`, sem enviar email.
+- O remetente direto é `EMAIL_FROM`; `jp@grupovelas.com.br` ainda não está
+  configurado. Gmail exige OAuth com escopo `gmail.send`.
+
+### Testes executados
+
+- `npm run verify`: **58 testes API + 14 domínio, todos passando**.
+- `npm run build:private:user1`: passou.
+- `npx tsc --noEmit -p apps/api/tsconfig.json`: passou.
+- Smoke local: `/api/health` = `200`, rota protegida sem sessão = `401`.
+- Sink de email local = `202`.
+- Dez requisições simultâneas ao health: `10/10` = `200`.
+- OpenRouter smoke sintético: `200`, modelo `google/gemini-2.5-flash`, 15 tokens,
+  custo aproximado de `US$0,0000067`.
+- OpenRouter com dez chamadas simultâneas no formato do app: **10/10 passaram**,
+  tempo total `2,216s`, latência individual entre `1,632s` e `2,204s`, nenhum
+  `429`, consumo de 18–19 tokens por chamada.
+
+### Limitações e incidentes de teste
+
+- Ainda não houve carga completa do worker com currículo, persistência no banco e
+  movimento no Quickin.
+- Ao iniciar a API local, o `.env` carregou o proxy n8n e o worker iniciou sozinho;
+  houve timeouts e logs de itens presos devolvidos à fila. O processo foi parado.
+  Próxima melhoria: flag explícita para iniciar o worker desligado em testes.
+- Consulta somente leitura ao proxy para selecionar 20 currículos retornou:
+  `count=1`, `withResumeUrl=0`, `withQuickinRaw=0`, `jobIds=1`. Portanto **não
+  foi feita carga com 20 currículos** e nenhum currículo foi enviado ao OpenRouter.
+- Não foi chamado Gmail real, n8n real, endpoint de confirmação real ou DAST/pentest.
+
+### Estado do trabalho local
+
+Além das alterações de segurança/convites das secções anteriores, ficaram locais:
+
+- `.env.example`, `package.json`;
+- `apps/api/src/config/env.ts`;
+- `apps/api/src/integrations/email/email.delivery.ts`;
+- `apps/api/src/integrations/n8n/corporate-email.ts`;
+- `apps/api/src/integrations/n8n/n8n.email.ts`;
+- `apps/api/src/integrations/n8n/n8n.rejection.ts`;
+- `apps/api/src/integrations/n8n/n8n.talent-bank.ts`;
+- `scripts/email-http-sink.mjs`;
+- mudanças anteriores em autorização de vagas, convites/idempotência e templates.
+
+### Próximos passos
+
+1. Criar flag `SCREENING_WORKER_ENABLED=false` para testes locais.
+2. Corrigir/confirmar a consulta de currículos e identificar por que só um placement
+   sem URL foi retornado.
+3. Só então executar carga controlada com 20 currículos, com autorização explícita
+   para enviar PII ao OpenRouter e sem persistir resultados reais.
+4. Obter OAuth de `jp@grupovelas.com.br` com `gmail.send` e testar Gmail direto.
