@@ -864,3 +864,127 @@ OpenRouter:
   apps/api/tsconfig.json` passou.
 - E2E autenticado, inspeção visual e teste de rotas protegidas com sessão real
   ainda dependem de executar o login Connect no navegador.
+
+---
+
+# 14. PRODUÇÃO ESTÁ FALHANDO HÁ SEMANAS (descoberta no fim da sessão)
+
+Achado ao ler `/app/app.log`. **Isto é mais grave do que tudo acima** e não tinha
+sido detectado porque `/api/health` responde `200` mesmo com a app sem banco.
+
+## 14.1 — O log
+
+`/app/app.log` tem **7,8 MB**. Processo de pé desde `=== START 2026-07-07T20:46:57Z ===`
+(~7 semanas). Contagem de erros acumulados:
+
+| Ocorrências | Erro |
+|---:|---|
+| 13.010 | `[proxy-pool] n8n respondeu 404: "The requested webhook \"POST talent-db\" is not registered"` |
+| 623 | `[proxy-pool] n8n respondeu 500: {"message":"Workflow execution failed"}` |
+| 276 | `relation "talent.candidates" does not exist` |
+| 193 | `[proxy-pool] n8n respondeu 40x: Authorization data is wrong!` |
+| 191 | `fetch failed` |
+| 18 | `Nao foi possivel buscar candidatos no Quickin.` |
+
+Por cron: **7.610** `[sync-candidates] erro`, **6.705** `[sync-calendar-cancellations] erro`.
+
+## 14.2 — Leitura dos três erros principais
+
+**`404 ... is not registered` (13.010, o dominante)** — não havia **nenhum**
+workflow ativo no path `talent-db`. Produção ficou sem acesso ao banco.
+**Já não aparece nas últimas 200 linhas** → é histórico, foi resolvido.
+
+**`Authorization data is wrong!` (193)** — assinatura do node Webhook com
+`authentication: headerAuth` **sem credencial vinculada**. É exatamente o modo de
+falha do `Talent DB Proxy — CORRIGIDO.json`. Confirma o diagnóstico daquele
+incidente, agora com evidência do log de produção.
+
+**`relation "talent.candidates" does not exist` (276)** — **bug separado e não
+investigado.** O código consulta uma tabela que não existe no banco. Pode ser
+schema errado (`talent.` vs `rh.`) ou migration não aplicada. **Investigar.**
+
+## 14.3 — Estado ATUAL (últimas 500 linhas do log)
+
+```
+36 × n8n respondeu 403
+24 × n8n respondeu 500
+ 0 × 404 not registered
+```
+
+Ou seja: o webhook **voltou a existir**, mas as chamadas de produção ainda são
+recusadas — agora com **403** e **500**.
+
+**Contradição não resolvida:** meu `curl` manual de hoje, com
+`x-webhook-key: gv_talent_db_2026`, devolveu **200 com linhas**. E o `.env` de
+produção tem `N8N_DB_WEBHOOK_KEY=gv_tal…` (bate). Mesmo assim prod leva 403/500.
+
+Hipóteses a testar na próxima sessão (nenhuma verificada):
+1. Há **mais de um workflow** no path `talent-db` e o roteamento é inconsistente
+   (o n8n aceita ativar só um; o outro pode estar respondendo em `/webhook-test/`)
+2. O workflow ativo é o `CORRIGIDO` (headerAuth sem credencial) → 403, e meu curl
+   acertou outro
+3. Prod monta o header com nome/caixa diferente do que o Code node lê
+   (`x-webhook-key`)
+4. As requisições que falham são as que enviam SQL que o `Auth + Validate` rejeita
+   (ex.: `sql` ausente) → 500 legítimo
+
+**Teste que separa as hipóteses:** rodar o mesmo `curl` que funcionou e, em
+paralelo, olhar a lista de execuções no n8n para ver qual workflow atendeu.
+
+## 14.4 — O bug do `undefined` está VIVO em produção
+
+Última linha útil do log:
+
+```
+[requireAuth] GET /jobs/undefined/results {
+```
+
+Sessão **autenticada** mandando `undefined`. É o mesmo bug corrigido hoje pelo
+guard em `canUserAccessJob` — e mais uma razão para publicá-lo.
+
+## 14.5 — Reiniciar o processo é PERIGOSO (bloqueio de deploy)
+
+```
+PID   PPID  COMMAND
+    1     0 node index.js
+```
+
+- **`node index.js` é o PID 1.** Não há s6, supervisor nem systemd.
+- Matar o PID 1 **encerra o container**. Se não houver política de restart no
+  orquestrador (fora do container, não visível daqui), a app **não volta**.
+- `/app/docker-compose.yml` não tem `restart:` (grep vazio) — mas não é
+  necessariamente o compose que subiu este container.
+- `/app/app.pid` contém `10172`, **PID que não existe** — arquivo obsoleto,
+  não confiar nele.
+
+**NÃO reiniciar sem antes descobrir quem sobe o container.** Perguntar ao
+responsável pela infra, ou achar a policy no host.
+
+## 14.6 — Detalhe de configuração
+
+`DATABASE_URL` **não está** em `/app/.env` — vem do **ambiente do container**
+(aparece em `env`, não no arquivo). Ao mexer no `.env`, isso não é afetado.
+
+## 14.7 — Ordem recomendada para a próxima sessão
+
+A ordem abaixo inverte a prioridade das secções 7 e 13.9: **não faz sentido
+publicar código novo numa produção que não fala com o banco.**
+
+1. **Resolver o proxy n8n primeiro.** Descobrir por que prod leva 403/500 (14.3).
+   Garantir **um único** workflow ativo no path `talent-db`, com credencial
+   Postgres vinculada. Validar com `curl` **e** confirmando no log de produção
+   que os erros pararam:
+   ```
+   tail -50 /app/app.log | grep -c 'proxy-pool'   # esperado: 0
+   ```
+2. **Investigar `relation "talent.candidates" does not exist`** (14.2).
+3. **Só então** avaliar o deploy do guard + tela nova, pelo plano de 13.9,
+   e **depois** de responder como reiniciar o processo (14.5).
+
+## 14.8 — Por que isto passou despercebido
+
+`/api/health` devolve `200 {"status":"ok"}` mesmo com o banco inacessível — o
+healthcheck não toca o banco. A app "está no ar" e falhando ao mesmo tempo.
+
+**Melhoria a considerar:** um `/api/health/deep` que faça um `select 1` pelo
+proxy e falhe de verdade quando o banco não responder.
