@@ -7,9 +7,12 @@ O Velas Talent está **parcialmente funcional em produção** (`https://talent.g
 Hoje descobrimos e diagnosticamos:
 1. **Produção não estava lenta por token — era o worker local agressivo saturando o proxy n8n**
 2. **O guard de autorização aceitava `undefined` como jobId** — corrigido, mas não deployado
-3. **O servidor está sem `.env`** (zero linhas) — risco crítico se fazer rsync com `--delete`
-4. **Main local está "ahead 19, behind 4" de origin/rebuild-1.0.2** — aqueles 4 commits removem pg.Pool fallback
+3. ~~**O servidor está sem `.env`** (zero linhas)~~ — **CORRIGIDO na 2ª parte da sessão: o `.env` EXISTE e tem 24 linhas.** Ver secção 13.
+4. **Main local está "ahead 19, behind 4" de origin/rebuild-1.0.2** — aqueles 4 commits removem pg.Pool fallback (mas ver correção na secção 13: o servidor está mais próximo do main local do que do rebuild-1.0.2)
 5. **Package.json mudou breaking changes** que precisam ser testadas antes de deploy
+
+> **LEIA A SECÇÃO 13 ANTES DE QUALQUER DEPLOY.** Ela corrige afirmações erradas
+> deste handoff e documenta o que mataria a aplicação em produção.
 
 ## 1. Arquitetura de Produção
 
@@ -385,3 +388,222 @@ User pediu recreate do zero seguindo "todas as regras de negocio" e "todos os cr
 - [ ] Teste de rsync em --dry-run
 - [ ] Deploy com procedimento ordenado (backup → rsync → restaurar .env → npm install → start)
 - [ ] Post-deploy: testes de health + função básica de triagem
+
+---
+
+# 13. ATUALIZAÇÃO — Investigação do servidor (2ª parte da sessão)
+
+Esta secção **corrige** afirmações erradas das secções 1 e 7 e documenta o que
+foi descoberto ao inspecionar o servidor de verdade. **Prevalece sobre o que está
+escrito acima.**
+
+## 13.1 — SSH deste servidor ignora comando por argumento
+
+**Sintoma:** `ssh -i key user1@IP 'comando'` retorna `exit=0` **sem nenhuma saída**.
+Não é erro de rede nem de chave — o comando simplesmente não roda.
+
+**Causa:** o servidor força um shell que lê da entrada padrão e descarta o
+argumento de comando do SSH.
+
+**Como fazer funcionar — sempre use heredoc:**
+
+```bash
+K=~/Downloads/user1_key
+ssh -i "$K" user1@167.233.30.181 << 'EOF'
+pwd
+ls -la /app
+EOF
+```
+
+O aviso `Pseudo-terminal will not be allocated because stdin is not a terminal.`
+é esperado e **não** indica falha.
+
+Isso custou várias tentativas em falso nesta sessão. O usuário já tinha avisado
+("ele vai retornar vazio se voce criar o comando ja com alguma instrução") — o
+aviso estava certo.
+
+## 13.2 — CORREÇÃO: o `.env` do servidor EXISTE
+
+A secção 1 diz que o `.env` tem "zero linhas". **Está errado.** Aquele zero veio
+de uma chamada SSH no formato que não executa (13.1).
+
+**Realidade — `/app/.env` tem 24 linhas**, com pelo menos:
+
+```
+NODE_ENV, PORT, APP_FRONTEND_URL, CONNECT_VERIFY_JWT_URL, VELAS_INTERNAL_KEY,
+QUICKIN_API_BASE_URL, QUICKIN_ACCOUNT_ID, QUICKIN_API_TOKEN,
+GOOGLE_CALENDAR_API_KEY, GOOGLE_CLOUD_API_KEY, ...
+```
+
+## 13.3 — O RISCO REAL DO DEPLOY NÃO É APAGAR O `.env`. É SOBRESCREVER.
+
+O `.env` **local** existe (1186 bytes, 21 linhas, valores de desenvolvimento
+apontando para o proxy n8n).
+
+O comando documentado em `docs/deploy/private-server-user1.md` exclui apenas
+`node_modules` e `.git`. **Ele mandaria o `.env` de desenvolvimento por cima do
+`.env` de produção.**
+
+Estar no `.gitignore` **não protege** — rsync copia o diretório de trabalho, não
+o que o git rastreia.
+
+**Qualquer rsync para este servidor precisa de `--exclude '.env' --exclude '.env.*'`.**
+
+## 13.4 — `--delete` MATA A APLICAÇÃO
+
+`/app/index.js` é o ponto de entrada do processo (`node index.js`, PID 1, cwd `/app`)
+e **NÃO existe no repositório**. É um wrapper criado à mão no servidor:
+
+```js
+import { createWriteStream, appendFileSync } from "node:fs";
+appendFileSync("/app/app.log", `\n=== START ${new Date().toISOString()} ===\n`);
+const logStream = createWriteStream("/app/app.log", { flags: "a" });
+const origOut = process.stdout.write.bind(process.stdout);
+const origErr = process.stderr.write.bind(process.stderr);
+process.stdout.write = (...args) => { logStream.write(...args); return origOut(...args); };
+process.stderr.write = (...args) => { logStream.write(...args); return origErr(...args); };
+await import("./apps/api/dist/server.js");
+```
+
+Ele existe para capturar stdout/stderr em `/app/app.log` (não há gerenciador de
+processo). `rsync --delete` **apagaria este arquivo** e a app não subiria no
+próximo restart.
+
+**Outros arquivos que só existem no servidor e seriam apagados:**
+
+| Arquivo | O que é |
+|---|---|
+| `index.js` | **ponto de entrada — crítico** |
+| `app.log`, `app.pid` | runtime |
+| `tunnel.log`, `tunnel.pid` | runtime |
+| `*.tgz` (4 arquivos) | backups feitos no servidor |
+| `run-full-sync.mjs`, `_verify_fix.mjs`, `setup_bulk_invite_test.mjs` | scripts avulsos |
+
+**Conclusão: `docs/deploy/private-server-user1.md` está PERIGOSO como escrito.**
+O comando de lá deve ser corrigido antes de qualquer uso.
+
+## 13.5 — Cadeia de execução em produção
+
+```
+node /app/index.js            (wrapper de log, PID 1, cwd /app)
+  └─ import ./apps/api/dist/server.js    (API compilada)
+```
+
+Front: existem **duas** cópias — `/app/dist/` (assets, index.html, favicon.svg,
+vt-logo.png) e `/app/apps/web/dist/`. Ainda **não confirmado** qual é a servida —
+verificar `SERVE_WEB`/`APP_BASE_PATH` no `server.js` antes de publicar o front.
+
+## 13.6 — CORREÇÃO: quão atrasado está o servidor, de verdade
+
+A secção 1 diz "produção está 19 commits atrás". **Impreciso.**
+
+O `package.json` do servidor tem:
+
+```
+"start:private": "SERVE_WEB=true PORT=3000 APP_BASE_PATH=/app1 npm --workspace @velas-talent/api run start"
+```
+
+Essa linha é **idêntica à do main local** e **diferente** da de
+`origin/rebuild-1.0.2`. Ou seja: **o servidor foi publicado a partir de algo
+próximo do main local, não do rebuild-1.0.2.**
+
+O que está confirmado como ausente em produção é apenas o trabalho de hoje:
+`grep "jobId invalido" /app/apps/api/dist/modules/jobs/jobs.repo.js` → não encontra.
+
+**Não repetir a afirmação "19 commits atrás" sem reverificar.** A relação entre
+`main` e `origin/rebuild-1.0.2` é de *unrelated histories* (git merge recusa), o
+que torna a contagem ahead/behind pouco significativa.
+
+## 13.7 — Build local: corrigida e passando
+
+A build falhava com:
+
+```
+tsconfig.app.json: error TS5101: Option 'baseUrl' is deprecated ...
+```
+
+**Causa:** `apps/web/tsconfig.app.json` tinha `"ignoreDeprecations": "5.0"`,
+mas o `tsc` do projeto é **6.0.3**, que exige `"6.0"`.
+
+Primeira tentativa minha inseriu uma segunda chave `ignoreDeprecations` no topo
+do objeto — **não funcionou**, porque em JSON a última chave repetida vence e a
+`"5.0"` de baixo continuava valendo. A correção certa foi **alterar o valor
+existente**, não adicionar outro.
+
+**Estado:** `npm run build:private:user1` passa. `apps/web/dist/` gerado,
+incluindo `TriagemPage-DWAde-UK.js`. O guard está compilado em
+`apps/api/dist/modules/jobs/jobs.repo.js`.
+
+**Não commitado ainda:**
+```
+ M apps/api/src/modules/jobs/jobs.repo.ts     (guard UUID fail-closed)
+ M apps/web/tsconfig.app.json                 (ignoreDeprecations 5.0 -> 6.0)
+```
+
+## 13.8 — Nota: rsync da árvore inteira é lento aqui
+
+Um `--dry-run` da árvore completa não terminou em 2 minutos e travou o SSH
+concorrente. A árvore local tem **480 MB**, dos quais **383 MB** são
+`node_modules`. Mesmo excluído, o rsync percorre a árvore local inteira.
+
+Preferir sync cirúrgico dos diretórios compilados.
+
+## 13.9 — PLANO DE DEPLOY SEGURO (substitui o da secção 7)
+
+**Nunca** usar o comando como está na doc. Usar:
+
+```bash
+cd ~/dev/velas-talent
+K=~/Downloads/user1_key
+
+# 1) Backup no servidor (heredoc!)
+ssh -i "$K" user1@167.233.30.181 << 'EOF'
+cp /app/.env /app/.env.bak.$(date +%s)
+cp /app/index.js /app/index.js.bak.$(date +%s)
+tar czf /tmp/api-dist-backup.tgz /app/apps/api/dist 2>/dev/null
+ls -la /app/.env.bak.* /app/index.js.bak.* | tail -4
+EOF
+
+# 2) Sync cirúrgico — SEM --delete, SEM .env, só o compilado
+rsync -avz --no-perms --no-owner --no-group \
+  -e "ssh -i $K" \
+  apps/api/dist/ user1@167.233.30.181:/app/apps/api/dist/
+
+rsync -avz --no-perms --no-owner --no-group \
+  -e "ssh -i $K" \
+  apps/web/dist/ user1@167.233.30.181:/app/apps/web/dist/
+
+# 3) Verificar que o guard chegou e reiniciar (heredoc!)
+ssh -i "$K" user1@167.233.30.181 << 'EOF'
+grep -c "jobId invalido" /app/apps/api/dist/modules/jobs/jobs.repo.js
+ls -la /app/index.js /app/.env
+EOF
+```
+
+**Antes de rodar isto, resolver:**
+
+- [ ] Confirmar de qual pasta o front é servido (13.5) — senão o front novo não aparece
+- [ ] Descobrir **como reiniciar** o processo: não há gerenciador; PID 1 roda
+      `node index.js`. Matar o PID 1 num container **encerra o container**.
+      Verificar se há restart automático antes de matar qualquer coisa.
+- [ ] Confirmar se `npm install` é necessário (mudou alguma dependência?)
+
+## 13.10 — Erros meus nesta parte da sessão
+
+1. **Declarei ".env do servidor está vazio" sem verificar o formato do SSH.**
+   O `wc -l` retornou 0 porque o comando não executou (13.1), não porque o
+   arquivo estivesse vazio. Construí um plano de deploy inteiro em cima disso.
+
+2. **Disse que o risco era o `--delete` apagar o `.env`.** O risco real era a
+   *sobrescrita* pelo `.env` de desenvolvimento — mecanismo diferente, e que o
+   `--exclude` do `--delete` não resolveria sozinho.
+
+3. **Tentei silenciar o TS5101 adicionando uma chave duplicada** em vez de
+   corrigir a existente. Não funcionou e me custou uma rodada de build.
+
+4. **"19 commits atrás"** foi afirmado com mais confiança do que a evidência
+   suportava (13.6).
+
+Padrão comum aos quatro: concluir a partir do primeiro sinal, sem confirmar o
+mecanismo. O usuário tinha avisado sobre o comportamento do SSH antes de eu
+esbarrar nele duas vezes.
