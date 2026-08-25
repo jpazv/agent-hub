@@ -666,3 +666,43 @@ Fechar primeiro o isolamento de vagas delegadas: proteger `GET /jobs/:jobId`,
 amarrar `placementId` ao `jobId` na movimentação e validar o job dos resultados
 antes de review/convite. Depois voltar ao reenvio de convites pendentes e à
 reconciliação de calendário. Não fazer deploy antes dessa revisão.
+
+## 15 — Reinício de produção e pesquisa operacional (2026-08-25)
+
+### Estado confirmado
+
+- Acesso Docker não está disponível dentro do ambiente remoto.
+- Não foi encontrado `systemd`, `supervisord` ou outro gerenciador acessível.
+- O processo principal é `node index.js`, PID 1, em `/app`.
+- `/app/index.js` é wrapper manual que importa `./apps/api/dist/server.js` e grava
+  logs em `/app/app.log`.
+- `/app/api/health` responde 200 enquanto o processo está ativo.
+- Nenhum comando destrutivo foi executado; produção não foi reiniciada nesta
+  investigação.
+
+### Pesquisa de reinício forçado
+
+- Políticas Docker (`always`/`unless-stopped`) são configuradas no host e podem
+  recuperar um container parado: [Docker restart policies](https://docs.docker.com/engine/containers/start-containers-automatically/).
+- Montar ou expor `/var/run/docker.sock` para reiniciar de dentro não é aceitável:
+  acesso ao socket equivale a acesso root ao host, conforme alerta do mantenedor
+  do Moby: [Moby discussion](https://github.com/moby/moby/discussions/46682).
+- `SIGHUP` não é solução para este app: não há handler de reload confirmado e
+  módulos Node já carregados não são substituídos.
+- `kill -TERM 1` ou `kill -KILL 1` somente deve ser usado depois de confirmar,
+  no host, que existe política automática de restart. Sem isso, derruba produção
+  sem mecanismo de retorno.
+
+### Próximo passo operacional
+
+Obter acesso ao host/orquestrador ou confirmação do operador sobre a política de
+restart. No host, verificar primeiro:
+
+```bash
+docker inspect -f '{{.HostConfig.RestartPolicy.Name}}' <container>
+```
+
+Só com política confirmada executar `docker restart -t 30 <container>` ou, como
+último recurso, terminar o PID 1 e deixar o runtime recuperar o processo. Não
+usar `docker.sock` como atalho. O deploy continua pendente até haver restart
+controlado e smoke test de `/api/health`, login, triagem e convite.
