@@ -819,3 +819,32 @@ OpenRouter:
   usuários simultâneos suportados.
 - A carga não gravou `screening_results`; apenas `insertTokenUsage` pode ter
   enviado telemetria assíncrona pelo proxy. Nenhum e-mail foi enviado.
+
+## 19 — Proteção contra timeouts e concorrência (2026-08-25)
+
+- Timeout de download de currículo ficou configurável por
+  `SCREENING_RESUME_FETCH_TIMEOUT_MS`, padrão 15s.
+- Extração PDF ganhou timeout próprio de 20s.
+- OpenRouter ficou configurável por `SCREENING_AI_TIMEOUT_MS`, padrão 45s.
+- Timeout/rede indisponível no OpenRouter agora gera resultado de fallback com
+  recomendação obrigatória `revisao_humana`, sem eliminar candidato e sem
+  travar permanentemente a fila.
+- Worker passou a processar até duas vagas em paralelo por passada, controlado
+  por `SCREENING_WORKER_JOB_CONCURRENCY` (máximo aceito 4), mantendo uma única
+  passada global para evitar sobreposição.
+- `npx tsc --noEmit -p apps/api/tsconfig.json` e `git diff --check` passaram.
+- Nova carga ainda pendente; precisa confirmar que os quatro casos anteriores
+  viram fallback controlado em vez de erro.
+
+## 20 — Estratégia final de fallback (2026-08-25)
+
+- Decisão: manter o modelo principal e o modelo fallback no mesmo pedido do
+  OpenRouter; o provedor já pode alternar sem expor currículo novamente.
+- Falhas de rede/timeout devem continuar como resultado de revisão humana, sem
+  eliminação automática.
+- A fila existente já reencaminha item retryable para `pending` enquanto
+  `attempts < max_attempts`; a ordenação por `updated_at` coloca a tentativa
+  no fim dos pendentes, evitando bloquear os demais candidatos.
+- Depois do limite de tentativas, o item permanece `failed` para revisão e não
+  entra em loop.
+- Não alterar banco nem layout para essa estratégia.
