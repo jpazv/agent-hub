@@ -16,9 +16,9 @@ Aba **955 (Laboratório)** — 9 dashcards, 5 cards, todos `(rascunho)`:
 |---|---|---|---|
 | 20318 | **13734** | 9  | Leads · Real / Saldo / Meta |
 | 20319 | **13735** | 9  | Agend. · Real / Saldo / Meta |
-| 20331 | **13731** | 12 | Investimento: real x cobrado x meta |
-| 20329 | **13732** | 18 | Leads x Meta |
-| 20330 | **13733** | 24 | Agendamentos x Meta |
+| 20331 | **13736** | 12 | Investimento: real x cobrado x meta |
+| 20329 | **13737** | 18 | Leads x Meta |
+| 20330 | **13738** | 24 | Agendamentos x Meta |
 | 20347 | — | 30 | heading órfão da fase 3 (tabela foi descartada pelo JP) |
 
 **Os 5 cards respondem a 2 filtros:** `Unidades` (`59d9c347`) e
@@ -109,13 +109,22 @@ Emitimos `NULL` + `line.missing: "interpolate"` → a linha atravessa reta, sem
 ponto e sem rótulo. Padrão copiado da série `Meta Agendamentos Diária` do
 card **88** (dash 10).
 
-### 3.5 Marcações `(parcial)` e `(início parcial)`
+### 3.5 Corte em junho + marcação `(parcial)`
 
 - `(parcial)` — período em curso; a meta dele também é parcial, para a barra ser
   comparável à linha em vez de parecer queda falsa.
-- `(início parcial)` — período que começou ANTES do primeiro lead da base. Sem
-  isso **maio aparece como fracasso**: tem meta cheia desde 01/05 e lead só a
-  partir de 20/05. Mesma ideia da guarda `série de lead incompleta` do Radar (§6).
+- **A série dos 3 gráficos começa no primeiro mês COMPLETO da base: junho/2026.**
+  Maio tem meta cheia desde 01/05 e primeiro dado real em **20/05** (leads, agend
+  e investimento, os três) — 8.268 leads contra meta de 18.885, ou seja aparecia
+  como fracasso de 44% sendo 12 dias de dado. Decisão do JP em 25/08.
+- 🔴 O corte usa `min(dia)` **GLOBAL, sem o filtro de unidade**. Se fosse por
+  unidade, uma com dado recente (ITC Guararapes, lead só desde 18/08) empurraria
+  o corte para frente e ficaria sem série nenhuma. Conferido: Guararapes mantém
+  3 períodos no mês.
+- Sem data fixa no SQL (`date_trunc('month', min(dia)) + INTERVAL '1 month'`) —
+  auto-ajusta se a base ganhar histórico.
+- Na prática o corte só morde em `month` (4 → 3 períodos). As janelas de `day`
+  (30 dias) e `week` (12 semanas) já começavam depois de junho.
 
 ### 3.6 Cobrado da `mv_mkt_financeiro`
 
@@ -220,7 +229,7 @@ SQLs versionados em
 | arquivo | card |
 |---|---|
 | `x1_leads.sql` / `x2_agend.sql` | 13734 / 13735 (scalars com granularidade) |
-| `w1_leads.sql` / `w2_agend.sql` / `w3_invest.sql` | 13732 / 13733 / 13731 (gráficos) |
+| `w1_leads.sql` / `w2_agend.sql` / `w3_invest.sql` | 13737 / 13738 / 13736 (gráficos, corte em junho) |
 | `h_cvs_proj.sql` | %CVS projetada (card descartado, fórmula validada) |
 | `t_diaria.sql` | tabela diária (descartada pelo JP) |
 
@@ -228,7 +237,7 @@ Backup: `BACKUP_dash316_20260825.json` (dashboard inteiro, antes de tudo).
 
 **Cards arquivados nesta sessão** (todos rascunhos, na Lixeira):
 13706 13707 13708 13709 13710 13711 13712 13713 13714 13715 13716 13717 13718
-13719 13720 13721 13722 13725 13726 13727 13730
+13719 13720 13721 13722 13725 13726 13727 13730 13731 13732 13733
 
 ---
 
