@@ -776,3 +776,23 @@ Além das alterações de segurança/convites das secções anteriores, ficaram 
 3. Só então executar carga controlada com 20 currículos, com autorização explícita
    para enviar PII ao OpenRouter e sem persistir resultados reais.
 4. Obter OAuth de `jp@grupovelas.com.br` com `gmail.send` e testar Gmail direto.
+
+## 17 — Tentativa de carga com duas vagas (2026-08-25)
+
+O usuário pediu carga concorrente simulando dois recrutadores, com 10 currículos
+por vaga. A execução foi bloqueada antes de enviar qualquer currículo ao
+OpenRouter:
+
+- Consulta de placements com `resume_url`/`quickin_raw` retornou `count=1`,
+  `withResumeUrl=0`, `withQuickinRaw=0`, `jobIds=1`.
+- Consulta agregada por vaga voltou `[{}]`, sem colunas úteis.
+- Consulta simples de até 25 placements também voltou `count=1` com um objeto
+  vazio.
+- Inferência: o webhook/proxy n8n atual está limitando, transformando ou
+  descartando os resultados, ou o banco acessível não contém a base esperada.
+  Não concluir ainda que não existem currículos.
+- Nenhum currículo real foi impresso, persistido localmente ou enviado ao
+  OpenRouter nesta tentativa.
+- A carga 10x10 continua pendente até corrigir/validar o retorno do proxy ou
+  disponibilizar uma fonte de leitura confiável. Não contornar o proxy com
+  acesso não autorizado ao Neon.
