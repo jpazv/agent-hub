@@ -31,7 +31,7 @@ Estado atual do JSON (26 nodes, íntegro). Fluxos:
 - Botão "Gerar" no front abre **nova aba** (window.open no gesto do clique), loading Velas, fetch → escreve o HTML pronto.
 
 ### Credenciais no workflow (o usuário configura no n8n após import)
-- OpenRouter no node `OpenRouter — Relatorio` (key sk-or-v1-REDACTED)
+- OpenRouter no node `OpenRouter — Relatorio` (key [REDACTED])
 - Header - Velas (id oUutVo70r2AR3lsh) nos HTTP Request internos + Sub-Verificar-JWT
 - Postgres - BD Velas (id zSuxDy2EHKaKRRql) nos nodes Postgres
 
