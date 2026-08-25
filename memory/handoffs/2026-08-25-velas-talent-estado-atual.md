@@ -796,3 +796,26 @@ OpenRouter:
 - A carga 10x10 continua pendente até corrigir/validar o retorno do proxy ou
   disponibilizar uma fonte de leitura confiável. Não contornar o proxy com
   acesso não autorizado ao Neon.
+
+## 18 — Diagnóstico do proxy e carga real 10x10 (2026-08-25)
+
+- Causa encontrada para o retorno anterior vazio: o workflow n8n responde o
+  contrato como `[{ rows, rowCount }]`, mas `proxy-pool.ts` tratava o array
+  externo como se cada item fosse uma linha. O app recebia um objeto embrulhado
+  em vez dos placements.
+- `apps/api/src/shared/db/proxy-pool.ts` foi ajustado para desembrulhar esse
+  formato antes de retornar `rows`. TypeScript passou.
+- Após o ajuste, a leitura retornou dados reais: as vagas escolhidas tinham
+  148 e 132 placements, respectivamente, com currículos disponíveis.
+- Carga autorizada executada sem persistir resultados de triagem nem mover
+  candidatos: duas vagas em paralelo, 10 currículos por vaga, 20 chamadas reais
+  ao OpenRouter.
+- Resultado: **16/20 passaram**; vaga `a748...c0c2f9`: **10/10**; vaga
+  `db004...1bf1d0`: **6/10**. Quatro falhas foram `AbortSignal.timeout` de
+  50 segundos. Nenhum `429` foi observado.
+- Latência total da carga: aproximadamente 60 segundos. As falhas ocorreram
+  somente na segunda vaga e devem ser investigadas no caminho de download/
+  extração de PDFs e na tolerância de concorrência, antes de considerar 10
+  usuários simultâneos suportados.
+- A carga não gravou `screening_results`; apenas `insertTokenUsage` pode ter
+  enviado telemetria assíncrona pelo proxy. Nenhum e-mail foi enviado.
