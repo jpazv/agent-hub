@@ -848,3 +848,19 @@ OpenRouter:
 - Depois do limite de tentativas, o item permanece `failed` para revisão e não
   entra em loop.
 - Não alterar banco nem layout para essa estratégia.
+
+## 21 — Ambiente local e E2E básico (2026-08-25)
+
+- API local iniciada em `http://127.0.0.1:3001` com
+  `SCREENING_WORKER=off` para evitar triagem automática durante inspeção.
+- Frontend Vite iniciado em `http://127.0.0.1:5174`; a porta 5173 já estava
+  ocupada por outro processo local.
+- Corrigido bootstrap de ambiente: `bootstrap-env.ts` carrega `.env` antes de
+  importar `app` e repositorios. Antes disso, módulos de email tentavam
+  inicializar sem `N8N_DB_WEBHOOK_URL`, apesar de a variável existir.
+- E2E básico passou: `/api/health` = 200, frontend `/api/health` via proxy =
+  200, rota protegida sem token = 401, headers de segurança presentes.
+- `npm run build:private:user1` passou e `npx tsc --noEmit -p
+  apps/api/tsconfig.json` passou.
+- E2E autenticado, inspeção visual e teste de rotas protegidas com sessão real
+  ainda dependem de executar o login Connect no navegador.
