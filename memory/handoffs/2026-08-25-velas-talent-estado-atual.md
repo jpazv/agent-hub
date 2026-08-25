@@ -607,3 +607,62 @@ EOF
 Padrão comum aos quatro: concluir a partir do primeiro sinal, sem confirmar o
 mecanismo. O usuário tinha avisado sobre o comportamento do SSH antes de eu
 esbarrar nele duas vezes.
+
+## 14 — Continuidade: diagnóstico funcional e hardening de convites (2026-08-25)
+
+### Decisões de escopo
+
+- Não incluir o legado Lite, nem como tela servida nem como fallback.
+- Preservar os commits positivos recentes; não reescrever layout.
+- Não alterar schema/banco salvo necessidade comprovada.
+- Prioridade: triagem segura, fallback, fila sem sobreposição, idempotência,
+  slots compreensíveis e agenda confiável para pelo menos 10 usuários.
+- Login real via VelasConnect confirmado pelo usuário como funcionando.
+- A API usa o proxy n8n (`N8N_DB_WEBHOOK_URL`); não assumir acesso direto ao
+  Neon sem confirmar a credencial do workflow.
+
+### Verificações realizadas
+
+- `npm run verify`: passou; 58 testes da API e 14 do domínio.
+- `npm run build:private:user1`: passou.
+- Smoke local: `/app1/api/health` 200, frontend 200, rota protegida sem sessão
+  401.
+- Produção: health público 200, mas artefatos compilados continuam de julho e
+  não contêm o guard UUID novo. Nenhum deploy recente foi concluído.
+
+### Alterações locais ainda não publicadas
+
+1. `apps/api/src/modules/email-templates/email-templates.routes.ts`
+   - Templates, logs e teste de envio agora exigem `superadmin`, `gestor_dho`,
+     `diretor` ou `rh`. Recrutador comum não pode editar HTML pela API.
+
+2. `apps/api/src/modules/email-templates/email-log.repo.ts`
+   - Reserva idempotente permite retry quando o envio anterior terminou em
+     `failed`; envio já `sent` continua bloqueado.
+
+3. `apps/api/src/modules/screening/screening.booking.ts`
+   - Convite individual reutiliza convite `pending`, token e slots existentes.
+   - Os dois fluxos em lote consultam convite `pending` antes de inserir, para
+     evitar registros duplicados em corrida simultânea.
+   - Ainda falta fluxo explícito para reenviar lote cujo convite `pending`
+     ficou salvo após falha; não considerar isso resolvido.
+
+### Riscos encontrados para a próxima etapa
+
+- Vagas delegadas: `canUserAccessJob` filtra a lista e as rotas de triagem,
+  mas `GET /jobs/:jobId` não chama o guard de acesso.
+- A movimentação valida acesso à vaga, mas ainda não confirma que `placementId`
+  pertence ao `jobId` informado. Isso pode permitir cruzamento de kanban por IDOR.
+- Review por `resultId` e convite individual por `resultId` não recebem `jobId`
+  na rota; precisam validar a vaga do resultado antes de alterar/enviar.
+- Quickin possui endpoints administrativos amplos; revisar se recrutador deve
+  sincronizar ou consultar dados fora do escopo da vaga delegada.
+- Agendamento chama Google Calendar dentro do fluxo de reserva. A falha externa
+  vira `calendar_pending`, mas ordem e reconciliação ainda precisam ser validadas.
+
+### Próximo passo recomendado
+
+Fechar primeiro o isolamento de vagas delegadas: proteger `GET /jobs/:jobId`,
+amarrar `placementId` ao `jobId` na movimentação e validar o job dos resultados
+antes de review/convite. Depois voltar ao reenvio de convites pendentes e à
+reconciliação de calendário. Não fazer deploy antes dessa revisão.
