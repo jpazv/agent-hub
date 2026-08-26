@@ -2,6 +2,15 @@
 
 Carregar em toda sessão que envolva Metabase, dashboards ou BI.
 
+## Sync do índice (rodar no boot)
+
+```bash
+HUB=$(grep '^hub_path' ~/.config/agents/machine.toml | cut -d'"' -f2)
+python3 "$HUB/memory/scripts/mb_sync.py" --quiet
+```
+
+Isso atualiza `memory/mapa_metabase_slim.json` — índice com IDs, nomes, tabelas e tabs de todos os dashboards. Use esse arquivo para localizar rapidamente qual MV/tabela um dashboard usa, sem chamar a API. Se precisar de detalhes de um card específico, aí sim chame a API.
+
 ## Acesso
 
 - **Base URL:** `https://metabase.grupovelas.com.br`
@@ -14,7 +23,7 @@ Carregar em toda sessão que envolva Metabase, dashboards ou BI.
 ### Token ativo
 
 ```
-MB_TOKEN=35cc2098-9ca6-4a1e-8388-22ec60a12116
+MB_TOKEN=c5794dd7-155d-462b-9622-d8aedf89baf1
 ```
 
 Login: `jp@grupovelas.com.br` / `Lara1212@@`
