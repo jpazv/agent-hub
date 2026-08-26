@@ -16,9 +16,9 @@ Aba **955 (Laboratório)** — 9 dashcards, 5 cards, todos `(rascunho)`:
 |---|---|---|---|
 | 20318 | **13734** | 9  | Leads · Real / Saldo / Meta |
 | 20319 | **13735** | 9  | Agend. · Real / Saldo / Meta |
-| 20331 | **13736** | 12 | Investimento: real x cobrado x meta |
-| 20329 | **13737** | 18 | Leads x Meta |
-| 20330 | **13738** | 24 | Agendamentos x Meta |
+| 20331 | **13740** | 12 | Investimento: real x cobrado x meta |
+| 20329 | **13741** | 18 | Leads x Meta |
+| 20330 | **13742** | 24 | Agendamentos x Meta |
 | 20347 | — | 30 | heading órfão da fase 3 (tabela foi descartada pelo JP) |
 
 **Os 5 cards respondem a 2 filtros:** `Unidades` (`59d9c347`) e
@@ -161,6 +161,45 @@ o card antigo mostrava `7,5% real / 6,5% esperada` (bom); contra o alvo fica
 `7,5% / 10,9%` (ruim). O Lead Score responde "esses leads deveriam converter
 quanto?"; a meta responde "o negócio precisa de quanto?".
 
+### 3.8 Projeção no período corrente (26/08)
+
+Nas visões **semana** e **mês** o período em curso agora é **projetado**, com
+sufixo ` (proj.)` em vez de ` (parcial)`. Em `day` não se aplica: o bucket de hoje
+nunca aparece, porque não tem dia fechado (`dc_ate = 0`) — mesmo critério do
+`13670`, que é o que faz a semana corrente sumir na segunda-feira.
+
+| métrica | fórmula | origem |
+|---|---|---|
+| Leads | realizado ÷ dias CORRIDOS decorridos × dias corridos totais | card `11268`, aba Tráfego |
+| Agend. | realizado ÷ dias ÚTEIS decorridos × dias úteis totais | card `11276`, aba Tráfego |
+| Investimento | realizado + `budget_sem` do último dia fechado × dias restantes | semanal `13670` |
+
+Agendamento usa as flags **`dia_util` e `dia_util_ate_hoje` da própria MV** —
+mais fiel que derivar de `isodow`, porque respeita feriado como o negócio
+cadastrou. A assimetria contra o lead (corridos vs úteis) é deliberada: mesma do RPD.
+
+**Investimento não se projeta pelo ritmo** porque o gasto futuro é *conhecido* —
+o `budget` do Windsor é teto diário já configurado. Decisão do JP em 26/08:
+manter a fonte que já estava no laboratório (`invest_total_sem` do outcomes +
+`budget_sem`), **sem** puxar `invest_projetado` da `mv_mkt_financeiro` (card
+`11422`), que só existe por competência mensal e não teria equivalente semanal.
+O cobrado projetado mantém a proporção cobrado/real do próprio período.
+
+**Validação:** rodado contra `11268`/`11276` em três recortes — bate exato.
+Tatuapé 926 leads / 80 agend · Brooklin 308 / 38 · rede 24.119 / 2.267.
+
+🔴 **A meta do bucket corrente passou a ser a CHEIA** (antes era cortada em
+ontem). Tem de ser: a barra agora representa o período inteiro projetado, então
+meta parcial subestimaria o alvo. É o que o `13670` faz.
+
+### 3.9 Janela da série, por granularidade (26/08)
+
+| granularidade | início |
+|---|---|
+| `day` | últimos 30 dias |
+| `week` | **primeira segunda-feira dentro do mês PASSADO** — mesma âncora do semanal `13670`. Não puxa mês anterior a esse (pedido do JP). Hoje: 06/07, 8 semanas. |
+| `month` | primeiro mês COMPLETO da base (junho/2026) |
+
 ---
 
 ## 4. Achado de negócio: 31% dos leads chegam em dia sem meta de agendamento
@@ -216,6 +255,23 @@ backup original, então nunca enxergaria um card *de laboratório* sumindo.
 ```
 Rodou limpo nas 4 levas seguintes: `sumiram: nenhum` em todas.
 
+### ⚠️ Segundo incidente (26/08): execução interrompida deixou órfão
+
+Um `Ctrl+C` no meio do script matou-o **depois** do primeiro `POST /api/card` e
+**antes** da limpeza. Resultado: card `13739` pendurado órfão em `r54 c12` da aba
+**Tráfego**, fora da tela.
+
+A execução seguinte não pegou: a detecção de órfão compara contra o snapshot
+tirado no início *daquela* execução, e o lixo já existia lá — foi classificado
+como pré-existente.
+
+**Quem pegou foi a contagem de dashcards POR ABA contra o BACKUP ORIGINAL**
+(Tráfego 20 → 21). Essa checagem é a única que sobrevive a execução abortada.
+Regra: **sempre diffar contra o backup do início da sessão, nunca só contra o
+estado imediatamente anterior.**
+
+Limpo: dashcard `20359` removido, card `13739` arquivado, Tráfego de volta a 20.
+
 ---
 
 ## 6. Arquivos
@@ -229,7 +285,7 @@ SQLs versionados em
 | arquivo | card |
 |---|---|
 | `x1_leads.sql` / `x2_agend.sql` | 13734 / 13735 (scalars com granularidade) |
-| `w1_leads.sql` / `w2_agend.sql` / `w3_invest.sql` | 13737 / 13738 / 13736 (gráficos, corte em junho) |
+| `z1_leads.sql` / `z2_agend.sql` / `z3_invest.sql` | 13741 / 13742 / 13740 (gráficos, com projeção) |
 | `h_cvs_proj.sql` | %CVS projetada (card descartado, fórmula validada) |
 | `t_diaria.sql` | tabela diária (descartada pelo JP) |
 
@@ -237,7 +293,7 @@ Backup: `BACKUP_dash316_20260825.json` (dashboard inteiro, antes de tudo).
 
 **Cards arquivados nesta sessão** (todos rascunhos, na Lixeira):
 13706 13707 13708 13709 13710 13711 13712 13713 13714 13715 13716 13717 13718
-13719 13720 13721 13722 13725 13726 13727 13730 13731 13732 13733
+13719 13720 13721 13722 13725 13726 13727 13730 13731 13732 13733 13736 13737 13738 13739
 
 ---
 
