@@ -91,7 +91,7 @@ quando o `referrer` é a própria lista interna do fluxo — aí o rótulo vira
 | Card **13645** `Unidades elegíveis` | coluna `Boutique` no SELECT e visível; `{{unidade}}` (morto — o filtro não existe mais no dash) → `{{boutique}}`, field 2298 | ✅ |
 | Dashcard **20232** | `parameter_mappings` `[]` → `Data` (857d5cf4), `Marca` (d15dc75f), `Boutique` (5c3fc048) | ✅ |
 | Card **13700** `Boutiques por sensibilidade` | `[[AND {{boutique}}]]` na CTE `neg` + tag `boutique` | ✅ |
-| Dashcard **20309** | mapear `5c3fc048` para a tabela filtrar a si mesma no clique | ⏳ |
+| Dashcard **20309** | mapeado em `5c3fc048` — a tabela passa a filtrar a si mesma no clique | ✅ |
 
 O card 13700 **já tinha** o `click_behavior` crossfilter na coluna Boutique — o
 clique alimentava o resto da aba mas a própria tabela continuava inteira, então
@@ -107,19 +107,30 @@ id 0 → as 25 da lista, intacta.
 irmã abaixo do mínimo, lista, não encontrada) e conferido visualmente nos temas
 dark e light.
 
-**Dashboard 59** — diff estrutural contra snapshot: 49 → 49 dashcards, nenhum
-sumiu/novo, **1 alterado (20232), só `parameter_mappings`**; `row`/`col`/`size`/
-`tab`/`visualization_settings` idênticos nos 49, inclusive o `click_behavior`
-do link do relatório; 6 abas na ordem; 10 filtros idênticos.
+**Dashboard 59** — diff estrutural contra snapshot a cada gravação: 49 → 49
+dashcards, nenhum sumiu/novo, e **cada PUT alterou exatamente um campo de um
+dashcard** (`parameter_mappings` do 20232, depois do 20309). Demais 48 com
+`card_id`/`row`/`col`/`size`/`tab`/`visualization_settings` idênticos em cada
+passo, inclusive o `click_behavior` do link do relatório; 6 abas na ordem;
+10 filtros idênticos.
 
-**Filtro funcional** pelo endpoint do dashcard: sem filtro 25 linhas;
-`Boutique - Ipanema` → 2 (Trata 70 + ITC 55); `Boutique - Barra da Tijuca` → 2
-(ITC 82 + Trata 44); `Marca = Instituto Trata` → 12.
+**Atenção ao ler o diff ponta a ponta:** entre as duas gravações o JP mexeu no
+layout da aba Alertas pela UI (11 dashcards com `row`/`size_y`/`viz_settings`
+alterados — 20247, 20253, 20254, 20300, 20301, 20306..20311). Não é efeito dos
+PUTs; o payload da segunda gravação foi montado a partir de um `GET` posterior
+e preservou tudo. Diff encadeado (before → after_put1 → base2 → final) confirma
+a autoria de cada mudança.
+
+**Filtro funcional** pelo endpoint do dashcard. Card 13645: sem filtro 25
+linhas; `Boutique - Ipanema` → 2 (Trata 70 + ITC 55); `Boutique - Barra da
+Tijuca` → 2 (ITC 82 + Trata 44); `Marca = Instituto Trata` → 12. Card 13700:
+sem filtro 24 linhas, `Boutique - Ipanema` → 1 — e como as 24 linhas têm
+boutique distinta e o filtro é igualdade sobre a chave do `GROUP BY`, qualquer
+linha clicada colapsa a tabela em exatamente uma.
 
 ## Pendências
 
 - [ ] **JP**: importar `NPS - Relatório por Unidade-4 (voltar-hub + boutique).json` no n8n
-- [ ] **Dashcard 20309**: PUT pendente — payload pronto em `dash_put2.json` no scratchpad da sessão
 - [ ] **Normalização de `dim_unidades.boutique`** (Ernandes): Brooklin, Vila Mariana,
       `Boutique - Savassi` vs `Boutique - BH - Savassi`, e a unidade de Fortaleza
       cadastrada com boutique `Santo André`. Enquanto não normalizar, nesses
@@ -147,4 +158,5 @@ do link do relatório; 6 abas na ordem; 10 filtros idênticos.
 ## Arquivos tocados
 
 - `~/Downloads/NPS - Relatório por Unidade-4 (voltar-hub + boutique).json` (novo)
-- Metabase: cards 13645 e 13700, dashcard 20232 (20309 pendente)
+- Metabase: cards 13645 e 13700, dashcards 20232 e 20309
+- Issue #270: comentário de fechamento postado (`issuecomment-5426387293`)
