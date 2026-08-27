@@ -129,21 +129,48 @@ monta layout e verifica duplicidade/contagem.
    e score multimodal.
 4. Alimentar a aba Mídias vNext em modo sombra, comparando as duas versões nos
    mesmos leads e sem sobrescrever a linha de base.
+5. Um maintainer do repositório deve atribuir formalmente a issue #352 ao
+   `jpazv`; o token utilizado não possui permissão para alterar assignees.
 
-## Issue GitHub — tentativa e bloqueio
+## Issue GitHub criada
 
-O body técnico completo foi preparado em
-`/private/tmp/issue-validacao-lsv.md`, com título proposto
-`[LSV] Criar dashboard técnico Validação LSV` e metadados:
+- issue: **#352** — `[LSV] Criar dashboard técnico Validação LSV`
+- URL: https://github.com/Grupo-Velas/produtividade-bi-dev/issues/352
+- repositório: `Grupo-Velas/produtividade-bi-dev`
+- Project: `Produtividade BI e Dev - Grupo Velas`
+- Project item: `PVTI_lADOEJ3d0M4BVg6Yzg4VHko`
+- Status: `Triagem/Backlog`
+- Setor solicitante: `BI`
+- Prioridade: `Critica`
+- Tipo: `Relatório`
 
-- responsável: `jpazv`
-- setor: BI
-- tipo: Relatório
-- prioridade: Crítica
-- status inicial: Triagem/Backlog
+O card contém a documentação técnica completa do dashboard: objetivo, contexto,
+critérios de sucesso, estrutura das quatro abas, IDs das 14 análises, fontes,
+filtros, achados estatísticos, inconsistências do LSV 369, validações executadas
+e próximos passos para o modelo multimodal.
 
-A criação não ocorreu: tanto o `gh` local quanto o token fornecido na conversa
-retornaram `HTTP 401: Bad credentials`. Não existe conector GitHub autenticado
-alternativo nesta sessão. Próximo passo: JP executar `gh auth login -h github.com`
-em terminal próprio e retomar a criação. O token inválido que apareceu na
-conversa/entrada de terminal deve ser revogado e não foi salvo no hub.
+### Limitação de atribuição
+
+O responsável sugerido no corpo é João Paulo (`jpazv`). A tentativa de atribuir
+o usuário foi aceita pela API REST sem erro, porém a leitura final da issue
+retornou `assignees: []`. A tentativa anterior pela API GraphQL falhou em
+`ReplaceActorsForAssignable` por falta de permissão do usuário/token. Portanto,
+o único campo pendente é o assignee formal da issue; deve ser definido por um
+maintainer com permissão no repositório.
+
+Nenhum token foi salvo no hub ou nos scripts. Como credenciais foram enviadas
+diretamente no chat durante as tentativas, elas devem ser rotacionadas após o
+uso.
+
+## Arquivos e commits desta sessão
+
+- handoff: `memory/handoffs/2026-08-27-validacao-lsv-dashboard-tecnico.md`
+- script temporário do Metabase: `/private/tmp/create_validacao_lsv.py`
+- body temporário da issue: `/private/tmp/issue-validacao-lsv.md`
+- scripts temporários do GitHub: `/private/tmp/create_issue_validacao_lsv.sh` e
+  `/private/tmp/verify_issue_validacao_lsv.sh`
+- commit inicial do handoff: `39c0f01` (`docs: registra dashboard tecnico de validacao LSV`)
+
+Os arquivos em `/private/tmp` não são versionados e podem ser descartados pelo
+sistema. As demais alterações/untracked existentes no hub pertencem a trabalhos
+anteriores e não foram incluídas nos commits desta tarefa.
