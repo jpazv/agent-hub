@@ -1,0 +1,1969 @@
+{
+ "parameters": [
+  {
+   "name": "Data",
+   "slug": "data",
+   "id": "857d5cf4",
+   "type": "date/all-options",
+   "sectionId": "date"
+  },
+  {
+   "name": "Marca",
+   "slug": "marca",
+   "id": "d15dc75f",
+   "type": "string/=",
+   "sectionId": "string",
+   "values_source_type": "static-list",
+   "values_source_config": {
+    "values": [
+     [
+      "ITC Vertebral"
+     ],
+     [
+      "Instituto Trata"
+     ]
+    ]
+   }
+  },
+  {
+   "slug": "boutique",
+   "default": [
+    "Boutique - Alphaville",
+    "Boutique - Bairro de Fátima",
+    "Boutique - Barra da Tijuca",
+    "Boutique - Curitiba",
+    "Boutique - Ipanema",
+    "Boutique - Meireles",
+    "Boutique - Niterói",
+    "Boutique - Pinheiros",
+    "Boutique - Ribeirão Preto",
+    "Boutique - Savassi",
+    "Boutique - Vila Mariana",
+    "Instituto Trata - Belo Horizonte - Savassi",
+    "Instituto Trata - Brooklin",
+    "Instituto Trata - Curitiba",
+    "Instituto Trata - Florianópolis",
+    "ITC Vertebral - Tatuapé",
+    "ITC Vertebral - São José dos Campos",
+    "ITC Vertebral - São Bernardo do Campo",
+    "ITC Vertebral - Vila Mariana",
+    "ITC Vertebral - Pinheiros",
+    "ITC Vertebral - Perdizes",
+    "ITC Vertebral - Mairiporã",
+    "ITC Vertebral - Juazeiro do Norte",
+    "ITC Vertebral - Jardins",
+    "ITC Vertebral - Goiânia - Setor Marista",
+    "ITC Vertebral - Chapecó",
+    "ITC Vertebral - Campinas",
+    "ITC Vertebral - Brooklin",
+    "ITC Vertebral - BH - Savassi",
+    "Instituto Trata - Vila Mariana",
+    "Instituto Trata - Santos",
+    "Instituto Trata - Niterói",
+    "Instituto Trata - Morumbi",
+    "Instituto Trata - Jundiaí",
+    "Instituto Trata - Jardins"
+   ],
+   "name": "Boutique",
+   "type": "string/=",
+   "sectionId": "string",
+   "values_source_type": "static-list",
+   "id": "5c3fc048",
+   "values_source_config": {
+    "values": [
+     [
+      "Boutique - Alphaville"
+     ],
+     [
+      "Boutique - BH - Savassi"
+     ],
+     [
+      "Boutique - Bairro de Fátima"
+     ],
+     [
+      "Boutique - Barra da Tijuca"
+     ],
+     [
+      "Boutique - Boa Vista"
+     ],
+     [
+      "Boutique - Curitiba"
+     ],
+     [
+      "Boutique - Franca"
+     ],
+     [
+      "Boutique - Guararapes"
+     ],
+     [
+      "Boutique - Ipanema"
+     ],
+     [
+      "Boutique - Itaim Bibi"
+     ],
+     [
+      "Boutique - Meireles"
+     ],
+     [
+      "Boutique - Niterói"
+     ],
+     [
+      "Boutique - Paulista"
+     ],
+     [
+      "Boutique - Ribeirão Preto"
+     ],
+     [
+      "Boutique - Savassi"
+     ],
+     [
+      "ITC Vertebral - Belém - PA"
+     ],
+     [
+      "ITC Vertebral - Brooklin"
+     ],
+     [
+      "ITC Vertebral - Campinas Cambuí"
+     ],
+     [
+      "ITC Vertebral - Campinas UP"
+     ],
+     [
+      "ITC Vertebral - Chapecó"
+     ],
+     [
+      "ITC Vertebral - Goiânia - Setor Marista"
+     ],
+     [
+      "ITC Vertebral - Jardins"
+     ],
+     [
+      "ITC Vertebral - Juazeiro do Norte"
+     ],
+     [
+      "ITC Vertebral - Mairiporã"
+     ],
+     [
+      "ITC Vertebral - Perdizes"
+     ],
+     [
+      "ITC Vertebral - Pinheiros"
+     ],
+     [
+      "ITC Vertebral - Porto Alegre"
+     ],
+     [
+      "ITC Vertebral - Recife"
+     ],
+     [
+      "ITC Vertebral - Santo André"
+     ],
+     [
+      "ITC Vertebral - São Bernardo do Campo"
+     ],
+     [
+      "ITC Vertebral - São José dos Campos"
+     ],
+     [
+      "ITC Vertebral - Tatuapé"
+     ],
+     [
+      "ITC Vertebral - Vila Mariana"
+     ],
+     [
+      "Instituto Trata - Araraquara"
+     ],
+     [
+      "Instituto Trata - Belém - Batista Campos"
+     ],
+     [
+      "Instituto Trata - Brooklin"
+     ],
+     [
+      "Instituto Trata - Campo Grande"
+     ],
+     [
+      "Instituto Trata - Florianópolis"
+     ],
+     [
+      "Instituto Trata - Goiânia"
+     ],
+     [
+      "Instituto Trata - Guararapes - 2"
+     ],
+     [
+      "Instituto Trata - Ipiranga"
+     ],
+     [
+      "Instituto Trata - Jundiaí"
+     ],
+     [
+      "Instituto Trata - Morumbi"
+     ],
+     [
+      "Instituto Trata - Pinheiros"
+     ],
+     [
+      "Instituto Trata - Santos"
+     ],
+     [
+      "Instituto Trata - Santos - 2"
+     ],
+     [
+      "Instituto Trata - São José -"
+     ],
+     [
+      "Instituto Trata - Vila Mariana"
+     ]
+    ]
+   },
+   "required": true
+  },
+  {
+   "name": "Mês/Ano",
+   "slug": "m%C3%AAs%2Fano",
+   "id": "ae772792",
+   "type": "date/month-year",
+   "sectionId": "date"
+  },
+  {
+   "name": "Recepção",
+   "slug": "recep%C3%A7%C3%A3o",
+   "id": "18d50bf5",
+   "type": "string/=",
+   "sectionId": "string",
+   "values_source_type": "card",
+   "values_source_config": {
+    "card_id": 2098,
+    "value_field": [
+     "field",
+     3500,
+     {
+      "base-type": "type/Text"
+     }
+    ]
+   }
+  },
+  {
+   "name": "Anamnese",
+   "slug": "anamnese",
+   "id": "3ef615d7",
+   "type": "string/=",
+   "sectionId": "string",
+   "values_source_type": "card",
+   "values_source_config": {
+    "card_id": 2098,
+    "value_field": [
+     "field",
+     3499,
+     {
+      "base-type": "type/Text"
+     }
+    ]
+   },
+   "values_query_type": "search"
+  },
+  {
+   "name": "Técnicas",
+   "slug": "t%C3%A9cnicas",
+   "id": "d2dcc040",
+   "type": "string/=",
+   "sectionId": "string",
+   "values_source_type": "card",
+   "values_source_config": {
+    "card_id": 2098,
+    "value_field": [
+     "field",
+     3497,
+     {
+      "base-type": "type/Text"
+     }
+    ]
+   }
+  },
+  {
+   "name": "Estrutura",
+   "slug": "estrutura",
+   "id": "32c04e30",
+   "type": "string/=",
+   "sectionId": "string",
+   "values_source_type": "card",
+   "values_source_config": {
+    "card_id": 2098,
+    "value_field": [
+     "field",
+     3498,
+     {
+      "base-type": "type/Text"
+     }
+    ]
+   }
+  },
+  {
+   "name": "Data (IA)",
+   "slug": "data_ia",
+   "id": "ia7d0a01",
+   "type": "date/all-options",
+   "sectionId": "date",
+   "default": "past90days"
+  },
+  {
+   "name": "Urgência",
+   "slug": "urgencia",
+   "id": "ia7d0a03",
+   "type": "string/=",
+   "sectionId": "string",
+   "values_source_type": "static-list",
+   "values_source_config": {
+    "values": [
+     [
+      "Crítica"
+     ],
+     [
+      "Alta"
+     ]
+    ]
+   },
+   "values_query_type": "list"
+  }
+ ],
+ "mappings": {
+  "2258": [],
+  "2257": [],
+  "2260": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 2105,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2105,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 2105,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2261": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 2106,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2106,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 2106,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2262": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 2107,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 2107,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "marca",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2107,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 2107,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2267": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2111,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2269": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2113,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2270": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2117,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2271": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 2119,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2119,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 2119,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2272": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 2120,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 2120,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "marca",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2120,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 2120,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2273": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2121,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "2274": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 2122,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 2122,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 2122,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11244": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7901,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7901,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7901,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11248": [],
+  "11246": [],
+  "11247": [],
+  "11245": [],
+  "11249": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7902,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7902,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7902,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11250": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7903,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7903,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7903,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11251": [],
+  "11252": [],
+  "11253": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7904,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7904,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7904,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11254": [],
+  "11255": [
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7905,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7905,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7905,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11256": [
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7906,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7906,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7906,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11257": [],
+  "11258": [
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7907,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7907,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7907,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11259": [
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7908,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7908,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7908,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11260": [
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "marca",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "18d50bf5",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "atendimento_recepcao",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "3ef615d7",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "fisioterapeuta_ouviu",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d2dcc040",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "fisioterapeuta_tecnicas_tratamento",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "32c04e30",
+    "card_id": 7909,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "estrutura_clinica",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11353": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "marca",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "18d50bf5",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "atendimento_recepcao",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "3ef615d7",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "fisioterapeuta_ouviu",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d2dcc040",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "fisioterapeuta_tecnicas_tratamento",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "32c04e30",
+    "card_id": 7971,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "estrutura_clinica",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11354": [
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7972,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7972,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 7972,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "marca",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7972,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/DateTime"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "11355": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 7975,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/Date"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 7975,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "marca",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 7975,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 7975,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/Date"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "15054": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 10702,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/Date"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 10702,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "marca",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 10702,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "boutique",
+      {
+       "base-type": "type/Text"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ae772792",
+    "card_id": 10702,
+    "target": [
+     "dimension",
+     [
+      "field",
+      "data",
+      {
+       "base-type": "type/Date"
+      }
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20232": [
+   {
+    "parameter_id": "857d5cf4",
+    "card_id": 13645,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "data"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 13645,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "marca"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13645,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20247": [
+   {
+    "parameter_id": "ia7d0a01",
+    "card_id": 13686,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "data"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 13686,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "marca"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "ia7d0a03",
+    "card_id": 13686,
+    "target": [
+     "variable",
+     [
+      "template-tag",
+      "urgencia"
+     ]
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13686,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20254": [
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 13689,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "marca"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13689,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20253": [
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 13688,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "marca"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13688,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20306": [],
+  "20307": [
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 13699,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "marca"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13699,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20300": [],
+  "20301": [],
+  "20302": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13702,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20303": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13703,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20308": [],
+  "20309": [
+   {
+    "parameter_id": "d15dc75f",
+    "card_id": 13700,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "marca"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   },
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13700,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20310": [],
+  "20311": [],
+  "20304": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13704,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ],
+  "20305": [
+   {
+    "parameter_id": "5c3fc048",
+    "card_id": 13705,
+    "target": [
+     "dimension",
+     [
+      "template-tag",
+      "boutique"
+     ],
+     {
+      "stage-number": 0
+     }
+    ]
+   }
+  ]
+ }
+}
