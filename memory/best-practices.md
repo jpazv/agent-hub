@@ -222,3 +222,15 @@ O dry-run que preve N dashcards e o PUT que devolve N+k denuncia k orfaos.
 Beck, Fowler, Martin, McConnell, Ousterhout, Evans, Vernon, Kleppmann,
 Feathers, Weinberg, Forsgren, Humble, Kim, Farley, OWASP, NIST e Google SRE.
 Use essas linhas como base conceitual, nao como obrigacao de leitura no boot.
+
+## Documentação de issues do GitHub
+
+**Padrão vigente desde 2026-09-02.** A issue do GitHub é o registro de
+microgerenciamento: toda entrega, decisão, hipótese descartada e limite de dado vai
+documentada nela — não só no chat, não só no handoff.
+
+Estrutura, regras de conteúdo e a relação com o handoff estão em
+[`memory/padrao-documentacao-issues.md`](padrao-documentacao-issues.md).
+
+Resumo: o handoff do hub é memória **entre sessões de IA**; a issue é memória **do time**.
+Os dois precisam existir.
